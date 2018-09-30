@@ -11,7 +11,7 @@ cmake_minimum_required( VERSION 3.0 )
 ##################################################################################
 
 # Project name
-project( Projet_LMG)
+project( Projet_Visu)
 add_compile_options(-std=c++11 -Wall)
 
 ##################################################################################
@@ -20,7 +20,7 @@ add_compile_options(-std=c++11 -Wall)
 
 # OpenGL
 find_package( OpenGL REQUIRED )
-find_package( GLUT REQUIRED )
+#find_package( GLUT REQUIRED )
 find_package( GLUT )
 #find_package( GLEW REQUIRED )
 find_package( GLEW )
@@ -33,23 +33,23 @@ find_package( GLEW )
 if(NOT ${OPENGL_FOUND})
     message("OPENGL not found")
 else()
-	include_directories( ${OPENGL_INCLUDE_DIRS} )
+        include_directories( ${OPENGL_INCLUDE_DIRS} )
 endif()
 
 # freeglut
 if(NOT ${GLUT_FOUND})
     message("GLUT not found")
-	include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/freeglut/include" )
+        include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/freeglut/include" )
 else()
-	include_directories( ${GLUT_INCLUDE_DIRS} )
+        include_directories( ${GLUT_INCLUDE_DIRS} )
 endif()
 
 # glew
 if(NOT ${GLEW_FOUND})
     message("GLEW not found")
-	include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/include" )
-else() 
-	include_directories( ${GLEW_INCLUDE_DIRS} )
+        include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/include" )
+else()
+        include_directories( ${GLEW_INCLUDE_DIRS} )
 endif()
 
 # glm
@@ -93,14 +93,14 @@ target_link_libraries( ${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/SOIL/lib/libS
 #OPENGL_LIBRARIES
 
 if(NOT ${GLUT_FOUND})
-	target_link_libraries( ${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/freeglut/lib/x64/freeglut.lib" )
+        target_link_libraries( ${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/freeglut/lib/x64/freeglut.lib" )
 else()
-	target_link_libraries( ${PROJECT_NAME} ${GLUT_glut_LIBRARY} )
-	#GLUT_LIBRARIES
+        target_link_libraries( ${PROJECT_NAME} ${GLUT_glut_LIBRARY} )
+        #GLUT_LIBRARIES
 endif()
 
 if(NOT ${GLUT_FOUND})
-	target_link_libraries( ${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/lib/Release/x64/glew32.lib" )
+        target_link_libraries( ${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/lib/Release/x64/glew32.lib" )
 else()
-	target_link_libraries( ${PROJECT_NAME} ${GLEW_LIBRARIES} )
+        target_link_libraries( ${PROJECT_NAME} ${GLEW_LIBRARIES} )
 endif()

@@ -42,8 +42,6 @@
 
 #include "AssetLoader.h"
 #include "Model3D.h"
-#include "SkyBox.h"
-#include "HeigthMap.h"
 #include "Picking.h"
 
 
@@ -85,12 +83,6 @@ int numberOfIndices_;
 Model3D model;
 //Texture
 GLuint mModelShaderProgram;
-
-
-//SkyBox
-SkyBox CubeMap;
-
-HeigthMap terrain;
 
 // Shader program
 GLuint shaderProgram;
@@ -219,17 +211,6 @@ bool initialize()
     {
         statusOK = initializeShaderProgram();
     }
-
-    if ( statusOK )
-    {
-            statusOK = CubeMap.initializeCubemap();
-    }
-
-    if ( statusOK )
-    {
-            statusOK = terrain.initializeHeigthMap();
-    }
-
 
     initializeCamera();
 
@@ -786,170 +767,24 @@ void display( void )
 
     // Retrieve 3D model / scene parameters
     glm::mat4 modelMatrix;
-    const bool useMeshAnimation = false; // TODO: use keyboard to activate/deactivate
+    const bool useMeshAnimation = false;
     if ( useMeshAnimation )
     {
         modelMatrix = glm::rotate( modelMatrix, static_cast< float >( currentTime ) * 0.001f, glm::vec3( 0.0f, 1.f, 0.f ) );
     }
 
-
-    //--------------------------------------------------------------------------------
-    // Cubemap
-    //--------------------------------------------------------------------------------
-
-    // Activation de la cubemap
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture(GL_TEXTURE_CUBE_MAP, CubeMap.texture );
-
-
-    // Set shader program
-    glUseProgram( CubeMap.mCubeMapShaderProgram );
-
-    // Model view projection matrix
-    uniformLocation = glGetUniformLocation( CubeMap.mCubeMapShaderProgram, "uModelViewProjectionMatrix" );
-    if ( uniformLocation >= 0 )
-    {
-            glm::mat4 modelMatrix = glm::mat4( 1.f );
-            modelMatrix = glm::scale( modelMatrix, glm::vec3( CubeMap.scale, CubeMap.scale, CubeMap.scale ) );
-            glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
-            glUniformMatrix4fv( uniformLocation, 1/*count*/, GL_FALSE/*transpose*/, glm::value_ptr( MVP ) );
-    }
-
-    uniformLocation = glGetUniformLocation( CubeMap.mCubeMapShaderProgram, "skybox" );
-    if ( uniformLocation >= 0 )
-    {
-            glUniform1i(uniformLocation, 0);
-    }
-
-    // Modify GL state(s)
-    // ...
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-    // Draw command
-    const GLsizei nbCubemapIndices = 6/*nb faces*/ * 2/*2 triangles per face*/ * 3/*nb indices per triangle*/;
-    glBindVertexArray( CubeMap.mCubemapVertexArray );
-    glDrawElements( GL_TRIANGLES/*mode*/, nbCubemapIndices/*count*/, GL_UNSIGNED_INT/*type*/, 0/*indices*/ );
-
-    // Reset GL state(s)
-    glUseProgram( 0 );
+    //--------------------
+    // Render scene
+    //--------------------
+    // - unbind VAO (0 is the default resource ID in OpenGL)
     glBindVertexArray( 0 );
-    glBindTexture( GL_TEXTURE_CUBE_MAP, 0 );
 
+    // Reset GL state(s) (fixed pipeline)
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
-    //--------------------------------------------------------------------------------
-    // Heigthmap
-    //--------------------------------------------------------------------------------
-
-    glUseProgram( terrain.mHeigthMapShaderProgram );
-
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-        //--------------------
-        // Send uniforms to GPU
-        //--------------------
-        // Retrieve 3D model / scene parameters
-        // Animation
-        uniformLocation = glGetUniformLocation( terrain.mHeigthMapShaderProgram, "time" );
-        //std::cout << uniformLocation << std::endl;
-        if ( uniformLocation >= 0 )
-        {
-            glUniform1f( uniformLocation, static_cast< float >( currentTime ) );
-        }
-
-        uniformLocation = glGetUniformLocation( terrain.mHeigthMapShaderProgram, "viewMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( viewMatrix ) );
-        }
-        // - projection matrix
-        uniformLocation = glGetUniformLocation( terrain.mHeigthMapShaderProgram, "projectionMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( projectionMatrix ) );
-        }
-        // Mesh
-        // - model matrix
-        uniformLocation = glGetUniformLocation( terrain.mHeigthMapShaderProgram, "modelMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glm::mat4 modelMatrix_heigth = glm::scale( modelMatrix, glm::vec3( CubeMap.scale, CubeMap.scale, CubeMap.scale ) );
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix_heigth ) );
-        }
-        // - normal matrix
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "normalMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glm::mat3 normalMatrix = glm::transpose( glm::inverse( glm::mat3( viewMatrix * modelMatrix ) ) );
-            glUniformMatrix3fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( normalMatrix ) );
-        }
-        // - mesh color
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "meshColor" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _meshColor ) );
-        }
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "materialKd" );
-        if ( uniformLocation >= 0 )
-        {
-            _materialKd = glm::vec3( 0.f, 0.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKd ) );
-        }
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "materialKs" );
-        if ( uniformLocation >= 0 )
-        {
-            _materialKs = glm::vec3( 1.f, 1.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKs ) );
-        }
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "materialShininess" );
-        if ( uniformLocation >= 0 )
-        {
-            _materialShininess = 20.f;
-            glUniform1f( uniformLocation, _materialShininess );
-        }
-        // - light
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "lightPosition" );
-        if ( uniformLocation >= 0 )
-        {
-            _lightPosition = glm::vec3( 0.f, 10.f, 0.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightPosition ) );
-        }
-        // - light
-        uniformLocation = glGetUniformLocation(  terrain.mHeigthMapShaderProgram, "lightColor" );
-        if ( uniformLocation >= 0 )
-        {
-            _lightColor = glm::vec3( 1.f, 1.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightColor ) );
-        }
-
-        //--------------------
-        // Render scene
-        //--------------------
-
-        // Set GL state(s) (fixed pipeline)
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-        // - bind VAO as current vertex array (in OpenGL state machine)
-        glBindVertexArray( terrain.mHeigthMapVertexArray );
-
-        /*glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, terrain.texture );*/
-        // - draw command
-        glDrawElements(
-             GL_TRIANGLES,      // mode
-             terrain.numberOfIndices_,  // count
-             GL_UNSIGNED_INT,   // data type
-             (void*)0           // element array buffer offset
-        );
-
-        // - unbind VAO (0 is the default resource ID in OpenGL)
-        glBindVertexArray( 0 );
-
-        // Reset GL state(s) (fixed pipeline)
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-
-        // Deactivate current shader program
-        glUseProgram( 0 );
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+    // Deactivate current shader program
+    glUseProgram( 0 );
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 
 
     //--------------------------------------------------------------------------------
@@ -960,123 +795,123 @@ void display( void )
 
 
 
-        //--------------------------------------------------------------------------------
-        // Send uniforms to GPU
-        //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
+    // Send uniforms to GPU
+    //--------------------------------------------------------------------------------
 
-        // - view matrix
-        uniformLocation = glGetUniformLocation( shaderProgram, "diffuseTex" );
-        if ( uniformLocation >= 0 )
-        {
-            if(model.AllTexture[i][0].size() > 0){
+    // - view matrix
+    uniformLocation = glGetUniformLocation( shaderProgram, "diffuseTex" );
+    if ( uniformLocation >= 0 )
+    {
+        if(model.AllTexture[i][0].size() > 0){
 
-                glUniform1i(uniformLocation, 0);
-            }
-
-        }
-        // Camera
-        // - view matrix
-        uniformLocation = glGetUniformLocation( shaderProgram, "viewMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( viewMatrix ) );
-        }
-        // - projection matrix
-        uniformLocation = glGetUniformLocation( shaderProgram, "projectionMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( projectionMatrix ) );
-        }
-        // Mesh
-        // - model matrix
-        uniformLocation = glGetUniformLocation( shaderProgram, "modelMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( model.transform[i] ) );
-        }
-        // - normal matrix
-        uniformLocation = glGetUniformLocation( shaderProgram, "normalMatrix" );
-        if ( uniformLocation >= 0 )
-        {
-            glm::mat3 normalMatrix = glm::transpose( glm::inverse( glm::mat3( viewMatrix * modelMatrix ) ) );
-            glUniformMatrix3fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( normalMatrix ) );
-        }
-        // - mesh color
-        uniformLocation = glGetUniformLocation( shaderProgram, "meshColor" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _meshColor ) );
-        }
-        uniformLocation = glGetUniformLocation( shaderProgram, "materialKd" );
-        if ( uniformLocation >= 0 )
-        {
-            if(i==model.selectedModel)
-                _materialKd = glm::vec3( 0.f, 1.f, 0.f );
-            else
-                _materialKd = glm::vec3( 0.f, 0.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKd ) );
-        }
-        uniformLocation = glGetUniformLocation( shaderProgram, "materialKs" );
-        if ( uniformLocation >= 0 )
-        {
-            _materialKs = glm::vec3( 1.f, 1.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKs ) );
-        }
-        uniformLocation = glGetUniformLocation( shaderProgram, "materialShininess" );
-        if ( uniformLocation >= 0 )
-        {
-            _materialShininess = 20.f;
-            glUniform1f( uniformLocation, _materialShininess );
-        }
-        // - light
-        uniformLocation = glGetUniformLocation( shaderProgram, "lightPosition" );
-        if ( uniformLocation >= 0 )
-        {
-            _lightPosition = glm::vec3( 0.f, 2.f, 3.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightPosition ) );
-        }
-        // - light
-        uniformLocation = glGetUniformLocation( shaderProgram, "lightColor" );
-        if ( uniformLocation >= 0 )
-        {
-            _lightColor = glm::vec3( 1.f, 1.f, 1.f );
-            glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightColor ) );
-        }
-        // Animation
-        uniformLocation = glGetUniformLocation( shaderProgram, "time" );
-        if ( uniformLocation >= 0 )
-        {
-            glUniform1f( uniformLocation, static_cast< float >( currentTime ) );
+            glUniform1i(uniformLocation, 0);
         }
 
-        //--------------------------------------------------------------------------------
-        // Render scene
-        //--------------------------------------------------------------------------------
-        // Set GL state(s) (fixed pipeline)
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
+    // Camera
+    // - view matrix
+    uniformLocation = glGetUniformLocation( shaderProgram, "viewMatrix" );
+    if ( uniformLocation >= 0 )
+    {
+        glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( viewMatrix ) );
+    }
+    // - projection matrix
+    uniformLocation = glGetUniformLocation( shaderProgram, "projectionMatrix" );
+    if ( uniformLocation >= 0 )
+    {
+        glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( projectionMatrix ) );
+    }
+    // Mesh
+    // - model matrix
+    uniformLocation = glGetUniformLocation( shaderProgram, "modelMatrix" );
+    if ( uniformLocation >= 0 )
+    {
+        glUniformMatrix4fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( model.transform[i] ) );
+    }
+    // - normal matrix
+    uniformLocation = glGetUniformLocation( shaderProgram, "normalMatrix" );
+    if ( uniformLocation >= 0 )
+    {
+        glm::mat3 normalMatrix = glm::transpose( glm::inverse( glm::mat3( viewMatrix * modelMatrix ) ) );
+        glUniformMatrix3fv( uniformLocation, 1, GL_FALSE, glm::value_ptr( normalMatrix ) );
+    }
+    // - mesh color
+    uniformLocation = glGetUniformLocation( shaderProgram, "meshColor" );
+    if ( uniformLocation >= 0 )
+    {
+        glUniform3fv( uniformLocation, 1, glm::value_ptr( _meshColor ) );
+    }
+    uniformLocation = glGetUniformLocation( shaderProgram, "materialKd" );
+    if ( uniformLocation >= 0 )
+    {
+        if(i==model.selectedModel)
+            _materialKd = glm::vec3( 0.f, 1.f, 0.f );
+        else
+            _materialKd = glm::vec3( 0.f, 0.f, 1.f );
+        glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKd ) );
+    }
+    uniformLocation = glGetUniformLocation( shaderProgram, "materialKs" );
+    if ( uniformLocation >= 0 )
+    {
+        _materialKs = glm::vec3( 1.f, 1.f, 1.f );
+        glUniform3fv( uniformLocation, 1, glm::value_ptr( _materialKs ) );
+    }
+    uniformLocation = glGetUniformLocation( shaderProgram, "materialShininess" );
+    if ( uniformLocation >= 0 )
+    {
+        _materialShininess = 20.f;
+        glUniform1f( uniformLocation, _materialShininess );
+    }
+    // - light
+    uniformLocation = glGetUniformLocation( shaderProgram, "lightPosition" );
+    if ( uniformLocation >= 0 )
+    {
+        _lightPosition = glm::vec3( 0.f, 2.f, 3.f );
+        glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightPosition ) );
+    }
+    // - light
+    uniformLocation = glGetUniformLocation( shaderProgram, "lightColor" );
+    if ( uniformLocation >= 0 )
+    {
+        _lightColor = glm::vec3( 1.f, 1.f, 1.f );
+        glUniform3fv( uniformLocation, 1, glm::value_ptr( _lightColor ) );
+    }
+    // Animation
+    uniformLocation = glGetUniformLocation( shaderProgram, "time" );
+    if ( uniformLocation >= 0 )
+    {
+        glUniform1f( uniformLocation, static_cast< float >( currentTime ) );
+    }
 
-        // - bind VAO as current vertex array (in OpenGL state machine)
-        glBindVertexArray( vertexArrays[i] );
+    //--------------------------------------------------------------------------------
+    // Render scene
+    //--------------------------------------------------------------------------------
+    // Set GL state(s) (fixed pipeline)
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-        glActiveTexture(GL_TEXTURE0); // active proper texture unit before binding
+    // - bind VAO as current vertex array (in OpenGL state machine)
+    glBindVertexArray( vertexArrays[i] );
 
-        // and finally bind the texture
-        glBindTexture(GL_TEXTURE_2D, model.AllTexture[i][0][0].id);
+    glActiveTexture(GL_TEXTURE0); // active proper texture unit before binding
 
-        // - draw command
-        glDrawElements(
-             GL_TRIANGLES,      // mode
-             model.indices[i].size(),  // count
-             GL_UNSIGNED_INT,   // data type
-             (void*)0           // element array buffer offset
-            );
-        // - unbind VAO (0 is the default resource ID in OpenGL)
-        glBindVertexArray( 0 );
-        // Reset GL state(s) (fixed pipeline)
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    // and finally bind the texture
+    glBindTexture(GL_TEXTURE_2D, model.AllTexture[i][0][0].id);
 
-        // Deactivate current shader program
-        glUseProgram( 0 );
+    // - draw command
+    glDrawElements(
+         GL_TRIANGLES,      // mode
+         model.indices[i].size(),  // count
+         GL_UNSIGNED_INT,   // data type
+         (void*)0           // element array buffer offset
+        );
+    // - unbind VAO (0 is the default resource ID in OpenGL)
+    glBindVertexArray( 0 );
+    // Reset GL state(s) (fixed pipeline)
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
+    // Deactivate current shader program
+    glUseProgram( 0 );
     }
 
 
@@ -1223,8 +1058,6 @@ void keyboard_CB(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-
-
 void special_CB(int key, int x, int y)
 {
     switch (key) {
@@ -1262,47 +1095,6 @@ void mouse_CB(int button, int state, int x, int y){
         mouseLastPosition.x = x;
         mouseLastPosition.y = y;
     }
-/*
-        GLint m_viewport[4];
-
-        glGetIntegerv( GL_VIEWPORT, m_viewport );
-        std::cout << "click " << x << ":" << y << std::endl;
-
-        glm::vec3 ray_origin;
-        glm::vec3 ray_direction;
-        const glm::mat4 viewMatrix = glm::lookAt( _cameraEye, _cameraCenter, _cameraUp );
-        const glm::mat4 projectionMatrix = glm::perspective( _cameraFovY, _cameraAspect, _cameraZNear, _cameraZFar );
-        Picking::ScreenPosToWorldRay(
-            x, y,
-            m_viewport[2], m_viewport[3],
-            viewMatrix,
-            projectionMatrix,
-            ray_origin,
-            ray_direction
-        );
-        bool isSelected=false;
-        float previous_distance;
-        for(int i=0; i<model.nb_mesh; i++){
-
-            float intersection_distance; // Output of TestRayOBBIntersection()
-
-            if ( Picking::TestRayOBBIntersection(
-                ray_origin,
-                ray_direction,
-                model.aabb_min[i],
-                model.aabb_max[i],
-                model.transform[i],
-                intersection_distance) && (!isSelected || intersection_distance < previous_distance)
-            ){
-                model.setSelect(i);
-                std::cout << "mesh " << i << std::endl;
-                previous_distance = intersection_distance;
-                isSelected = true;
-            }
-        }
-        if(!isSelected)
-            model.setSelect(-1);
-    }*/
 
     //ZOOM
     if(button==3){
@@ -1360,19 +1152,11 @@ int main( int argc, char** argv )
 
     dataRepository = programPath.substr( 0, found );
 
-    //Repository de la skyBox
-    CubeMap.ImgRepository = dataRepository+"/../LMG_project/Map/";
-
-    terrain.ImgRepository = dataRepository+"/../LMG_project/HeigthMap/chili.jpg";
-
     //Load le mesh 3D
-    model.loadMesh(dataRepository+"/../LMG_project/Model3D/meute.obj");
+    model.loadMesh(dataRepository+"/../Projet_Visu/Model3D/meute.obj");
 
     // Initialize the GLUT library
     glutInit( &argc, argv );
-
-    //glutInitContextVersion( 3, 3 );
-    //glutInitContextProfile( GLUT_COMPATIBILITY_PROFILE );
 
     // Grahics window
     // - configure the main framebuffer to store rgba colors,
