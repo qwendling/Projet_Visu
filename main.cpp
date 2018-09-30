@@ -45,14 +45,7 @@
 #include "Picking.h"
 
 
-
-/******************************************************************************
- ****************************** NAMESPACE SECTION *****************************
- ******************************************************************************/
-
-/******************************************************************************
- ************************* DEFINE AND CONSTANT SECTION ************************
- ******************************************************************************/
+/******* CONSTANT *******/
 
 // VBO (vertex buffer object) : used to store positions coordinates at each point
 GLuint positionBuffer;
@@ -72,8 +65,6 @@ std::vector<GLuint> indexBuffers;
 std::vector<GLuint> textureCoordinateBuffers;
 // VAO (vertex array object) : used to encapsulate several VBO
 std::vector<GLuint> vertexArrays;
-
-
 
 // Mesh
 int numberOfVertices_;
@@ -127,17 +118,11 @@ int scaleMode = 0;
 int rotateMode = 0;
 int translateMode = 0;
 float xAxe = 0, yAxe=0, zAxe=0;
-/******************************************************************************
- ***************************** TYPE DEFINITION ********************************
- ******************************************************************************/
 
-/******************************************************************************
-***************************** METHOD DEFINITION ******************************
-******************************************************************************/
 
-/******************************************************************************
- ***************************** METHOD DEFINITION ******************************
- ******************************************************************************/
+
+
+/******* DEFINITION *******/
 
 bool initialize();
 bool checkExtensions();
@@ -147,14 +132,9 @@ bool initializeShaderProgram();
 void initializeCamera();
 bool finalize();
 
+/**************************/
 
-/******************************************************************************
- * Helper function used to load shader source code from files
- *
- * @param pFilename ...
- *
- * @return ...
- ******************************************************************************/
+// Recupere le contenu du fichier
 bool getFileContent( const std::string& pFilename, std::string& pFileContent )
 {
     std::ifstream file( pFilename.c_str(), std::ios::in );
@@ -182,9 +162,7 @@ bool getFileContent( const std::string& pFilename, std::string& pFileContent )
     return false;
 }
 
-/******************************************************************************
- * Initialize all
- ******************************************************************************/
+// Initialisation
 bool initialize()
 {
     std::cout << "Initialize all..." << std::endl;
@@ -217,9 +195,7 @@ bool initialize()
     return statusOK;
 }
 
-/******************************************************************************
- * Initialize the camera
- ******************************************************************************/
+// Initialisation camera
 void initializeCamera()
 {
     // User parameters
@@ -234,9 +210,6 @@ void initializeCamera()
     _cameraZFar = 100.f;
 }
 
-/******************************************************************************
- * Finalize all
- ******************************************************************************/
 bool finalize()
 {
     bool statusOK = true;
@@ -246,9 +219,7 @@ bool finalize()
     return statusOK;
 }
 
-/******************************************************************************
- * Check GL extensions
- ******************************************************************************/
+// Check extension
 bool checkExtensions()
 {
     bool statusOK = true;
@@ -258,9 +229,7 @@ bool checkExtensions()
     return statusOK;
 }
 
-/******************************************************************************
-* Initialize model shader
-******************************************************************************/
+// Initialisation model shader
 bool initializeModelTShader(){
     bool statusOK = true;
 
@@ -420,9 +389,7 @@ bool initializeModelTShader(){
     return statusOK;
 }
 
-/******************************************************************************
- * Initialize array buffer
- ******************************************************************************/
+// Initialisation array buffer
 bool initializeArrayBuffer()
 {
     bool statusOK = true;
@@ -502,9 +469,7 @@ bool initializeArrayBuffer()
     return statusOK;
 }
 
-/******************************************************************************
- * Initialize vertex array
- ******************************************************************************/
+// Initialisation vertex array
 bool initializeVertexArray()
 {
     bool statusOK = true;
@@ -557,9 +522,7 @@ bool initializeVertexArray()
     return statusOK;
 }
 
-/******************************************************************************
- * Initialize shader program
- ******************************************************************************/
+// Initialisation shader program
 bool initializeShaderProgram()
 {
     bool statusOK = true;
@@ -722,9 +685,7 @@ bool initializeShaderProgram()
     return statusOK;
 }
 
-/******************************************************************************
- * Callback to display the scene
- ******************************************************************************/
+// Display scene
 void display( void )
 {
     // Timer info
@@ -925,9 +886,6 @@ void display( void )
 }
 
 
-/******************************************************************************
- * Callback for KeyBoardEvent
- ******************************************************************************/
 void keyboard_CB(unsigned char key, int x, int y)
 {
     switch(key){
@@ -1132,21 +1090,17 @@ void mouseMove(int x, int y){
     glutPostRedisplay();
 }
 
-/******************************************************************************
- * Callback continuously called when events are not being received
- ******************************************************************************/
+// Callback called when events are not being received
 void idle( void )
 {
     // Mark current window as needing to be redisplayed
     glutPostRedisplay();
 }
 
-/******************************************************************************
- * Main function
- ******************************************************************************/
+
+// Main Function
 int main( int argc, char** argv )
 {
-    std::cout << "Projet LMG" << std::endl;
     std::string programPath = argv[ 0 ];
     std::size_t found = programPath.find_last_of( "/\\" );
 
