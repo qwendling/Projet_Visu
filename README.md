@@ -1,2 +1,13 @@
-# Projet_Visu
-Projet de visualisation et vision automne 2018
+# LMG_Project
+Projet de LMG askip
+
+
+Aide Project
+
+Charger un model 3D : ASSIMP
+
+Terrain: generer un terrain 2D , avec une image d'élévation entre 0 et 255 qui va modifier le terrain
+
+Camera : yow,pitch,rool 
+
+Sky-Box : ta compris mon pote 
