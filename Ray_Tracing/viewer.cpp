@@ -15,8 +15,19 @@ Viewer::Viewer():
 	BLANC(1,1,1),
 	GRIS(0.5,0.5,0.5),
     NOIR(0,0,0)
-{}
+{
+    _Loader = new AssetLoader();
+}
 
+
+void Viewer::loadMesh(const std::string filename){
+    bool statusOk = _Loader->import(filename);
+    assert(statusOk);
+    bool loadOk = _Loader->loadData(t_mesh);
+
+    assert(loadOk);
+    nb_mesh = _Loader->_scene->mNumMeshes;
+}
 
 void Viewer::init()
 {
@@ -41,6 +52,9 @@ void Viewer::init()
 	m_compteur = 0;
 
 	m_mesh.gl_init();
+    for(unsigned i=0;i<t_mesh.size();i++){
+        t_mesh[i].gl_init();
+    }
 }
 
 
@@ -52,8 +66,20 @@ void Viewer::draw()
 
 	m_mesh.set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
 
-	if (m_render_mode==0)
+    if (m_render_mode==0){
+        for(unsigned i=0;i<t_mesh.size();i++){
+            t_mesh[i].draw(ROUGE);
+            std::cout << "test" << i << std::endl;
+        }
 		m_mesh.draw(ROUGE);
+    }
+
+    if (m_render_mode==1){
+        for(unsigned i=0;i<t_mesh.size();i++){
+            t_mesh[i].draw_smooth(ROUGE);
+        }
+        m_mesh.draw_smooth(ROUGE);
+    }
 
 	if (m_render_mode==1)
 		m_mesh.draw_smooth(ROUGE);

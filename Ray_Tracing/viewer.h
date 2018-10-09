@@ -8,6 +8,7 @@
 #include <matrices.h>
 #include <primitives.h>
 #include <meshtri.h>
+#include "AssetLoader.h"
 
 
 
@@ -22,6 +23,8 @@ class Viewer : public QGLViewer
 
 public:
     Viewer();
+    void loadMesh(const std::string filename);
+    int nb_mesh;
 
 protected:
 	/// OpenGL intialisation appelee par la QGLViewer
@@ -34,6 +37,8 @@ protected:
 
 	/// callback when key pressed
     void keyPressEvent(QKeyEvent *e);
+
+
 
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentModelViewMatrix() const;
@@ -61,6 +66,8 @@ protected:
     /// editeur de polygon
 
 	MeshTri m_mesh;
+    AssetLoader* _Loader;
+    std::vector<MeshTri> t_mesh;
 };
 
 #endif

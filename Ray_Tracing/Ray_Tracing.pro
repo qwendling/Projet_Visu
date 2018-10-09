@@ -11,6 +11,9 @@ TEMPLATE = app
 
 # include path for QGLViewer & glm
 INCLUDEPATH += ..
+INCLUDEPATH += ../assimp/include
+
+LIBS += $$_PRO_FILE_PWD_/../assimp/lib/libassimp.so
 
 DESTDIR =$$_PRO_FILE_PWD_/../bin/
 
@@ -36,10 +39,12 @@ LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33 -lopengl32
 
 SOURCES += main.cpp \
     viewer.cpp \
-meshtri.cpp
+meshtri.cpp \
+AssetLoader.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
-meshtri.h
+meshtri.h \
+AssetLoader.h
 
 

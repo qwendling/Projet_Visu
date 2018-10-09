@@ -94,12 +94,6 @@ void MeshTri::draw_smooth(const Vec3& color)
 
 	glUniform3fv(m_shader_phong->idOfColorUniform, 1, glm::value_ptr(color));
 
-    glBindVertexArray(m_vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_ebo);
-	glDrawElements(GL_TRIANGLES, m_indices.size(),GL_UNSIGNED_INT,0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-	glBindVertexArray(0);
-
     glBindVertexArray(m_vao2);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_ebo);
     glDrawElements(GL_TRIANGLES, m_indices.size(),GL_UNSIGNED_INT,0);
@@ -237,6 +231,7 @@ void MeshTri::compute_normals()
         std::cout << m_normals[i] << std::endl;
     }
     std::cout << "test3" << std::endl;
+    gl_update();
 
 }
 
