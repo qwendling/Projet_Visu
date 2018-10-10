@@ -42,11 +42,13 @@ SOURCES += main.cpp \
 meshtri.cpp \
 AssetLoader.cpp \
     rayon.cpp
+    triangle.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
 meshtri.h \
 AssetLoader.h \
     rayon.h
+    triangle.h
 
 
