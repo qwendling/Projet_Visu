@@ -1,5 +1,5 @@
-QMAKE_PRL_BUILD_DIR = /home/quentin/build-geom3D-Desktop-Debug/QGLViewer
+QMAKE_PRL_BUILD_DIR = /adhome/n/nu/nurbain/Documents/Visu/build-geom3D-Desktop_Qt_5_11_1_GCC_64bit-Debug/QGLViewer
 QMAKE_PRO_INPUT = QGLViewer.pro
 QMAKE_PRL_TARGET = libQGLViewer33.so.1.0.0
-QMAKE_PRL_CONFIG = lex yacc exceptions depend_includepath testcase_targets import_plugins import_qpa_plugin qt warn_on release link_prl incremental shared qpa no_mocdepend release qt_no_framework linux unix posix gcc opengl thread create_prl rtti no_keywords have_target dll uic opengl moc resources
+QMAKE_PRL_CONFIG = lex yacc exceptions depend_includepath testcase_targets import_plugins import_qpa_plugin file_copies qmake_use qt warn_on release link_prl incremental shared release linux unix posix gcc qml_debug opengl thread create_prl rtti no_keywords have_target dll uic opengl moc resources
 QMAKE_PRL_VERSION = 1.0.0

@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS = QGLViewer OGLRender Transfos Revolution Projet_modeling \ 
+SUBDIRS = QGLViewer OGLRender \
     Ray_Tracing
 
  # what subproject depends on others
