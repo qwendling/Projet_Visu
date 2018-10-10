@@ -25,6 +25,7 @@ public:
     Viewer();
     void loadMesh(const std::string filename);
     int nb_mesh;
+    std::vector<MeshTri> t_mesh;
 
 protected:
 	/// OpenGL intialisation appelee par la QGLViewer
@@ -67,7 +68,6 @@ protected:
 
 	MeshTri m_mesh;
     AssetLoader* _Loader;
-    std::vector<MeshTri> t_mesh;
 };
 
 #endif

@@ -11,7 +11,7 @@ TEMPLATE = app
 
 # include path for QGLViewer & glm
 INCLUDEPATH += ..
-INCLUDEPATH += ../assimp/include
+INCLUDEPATH += $$_PRO_FILE_PWD_/../assimp/include
 
 LIBS += $$_PRO_FILE_PWD_/../assimp/lib/libassimp.so
 

@@ -64,12 +64,16 @@ void Viewer::draw()
 {
 	makeCurrent();
 
+    for(unsigned i=0;i<t_mesh.size();i++){
+        t_mesh[i].set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
+        t_mesh[i].gl_update();
+    }
+
 	m_mesh.set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
 
     if (m_render_mode==0){
         for(unsigned i=0;i<t_mesh.size();i++){
             t_mesh[i].draw(ROUGE);
-            std::cout << "test" << i << std::endl;
         }
 		m_mesh.draw(ROUGE);
     }
