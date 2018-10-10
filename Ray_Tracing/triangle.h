@@ -5,7 +5,7 @@
 
 typedef glm::vec3 Vec3;
 
-class triangle
+class Triangle
 {
 protected:
     Vec3 s_1;
@@ -15,7 +15,7 @@ protected:
     Vec3 normal;
 
 public:
-    triangle(Vec3 s1, Vec3 s2, Vec3 s3);
+    Triangle(Vec3 s1, Vec3 s2, Vec3 s3);
 
     Vec3 computeNormal();
 };
