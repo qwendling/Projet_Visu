@@ -2,10 +2,12 @@
 #include "viewer.h"
 #include "AssetLoader.h"
 #include "rayon.h"
+#include "source_facette.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+    srand (time(NULL));
 
     QGLFormat glFormat;
     glFormat.setVersion( 3, 3 );
