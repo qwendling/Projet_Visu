@@ -40,11 +40,13 @@ LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33 -lopengl32
 SOURCES += main.cpp \
     viewer.cpp \
 meshtri.cpp \
-AssetLoader.cpp
+AssetLoader.cpp \
+    rayon.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
 meshtri.h \
-AssetLoader.h
+AssetLoader.h \
+    rayon.h
 
 

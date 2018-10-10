@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "viewer.h"
 #include "AssetLoader.h"
+#include "rayon.h"
 
 int main(int argc, char *argv[])
 {
