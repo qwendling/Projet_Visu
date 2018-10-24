@@ -1,5 +1,10 @@
 #include "source_facette.h"
 
+
+Vec3 operator*(const Vec3& v,double x){
+    return Vec3(v.x*x,v.y*x,v.z*x);
+}
+
 source_facette::source_facette(const Triangle& t)
 {
     Vec3 u1 = t.s_2 - t.s_1;

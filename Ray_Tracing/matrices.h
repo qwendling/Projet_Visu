@@ -5,8 +5,11 @@
 #include <iostream>
 #include <iomanip>
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 typedef glm::mat4 Mat4;
 typedef glm::vec2 Vec2;
@@ -93,6 +96,13 @@ inline Vec3 vec_normalize(const Vec3& v)
 	return n;
 }
 
+/*
+Vec3 operator*(const Vec3& v,int x){
+    return Vec3(v.x*x,v.y*x,v.z*x);
+}
 
-
+Vec3 operator/(const Vec3& v,int x){
+    return Vec3(v.x/x,v.y/x,v.z/x);
+}
+*/
 #endif // MATRICES_H

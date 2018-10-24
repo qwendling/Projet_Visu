@@ -1,6 +1,14 @@
 #include "triangle.h"
 
-Triangle::triangle(Vec3 s1, Vec3 s2, Vec3 s3)
+Vec3 operator*(const Vec3& v,int x){
+    return Vec3(v.x*x,v.y*x,v.z*x);
+}
+
+Vec3 operator/(const Vec3& v,int x){
+    return Vec3(v.x/x,v.y/x,v.z/x);
+}
+
+Triangle::Triangle(Vec3 s1, Vec3 s2, Vec3 s3)
 {
     this->s_1 = s1;
     this->s_2 = s2;
