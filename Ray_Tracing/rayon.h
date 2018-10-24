@@ -12,7 +12,7 @@ protected:
 public:
     Rayon(Vec3 o,Vec3 d):origine(o),direction(d){}
 
-    bool intersecTri(Triangle t, Vec3 &pts);
+    bool intersecTri(Triangle t, Vec3 &inter);
 
 
 };

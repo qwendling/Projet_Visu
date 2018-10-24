@@ -10,7 +10,7 @@
 #include <meshtri.h>
 #include "AssetLoader.h"
 
-
+#include "list_triangle.h"
 
 /**
  * @brief The Viewer class
@@ -26,6 +26,11 @@ public:
     void loadMesh(const std::string filename);
     int nb_mesh;
     std::vector<MeshTri> t_mesh;
+    void rayClick(QMouseEvent* event, qglviewer::Vec& P, qglviewer::Vec& Q);
+    void mousePressEvent(QMouseEvent* event);
+    qglviewer::Vec P1;
+    qglviewer::Vec P2;
+    List_triangle tris;
 
 protected:
 	/// OpenGL intialisation appelee par la QGLViewer

@@ -43,7 +43,8 @@ meshtri.cpp \
 AssetLoader.cpp \
     rayon.cpp \
     triangle.cpp \
-    source_facette.cpp
+    source_facette.cpp \
+    list_triangle.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -51,6 +52,7 @@ meshtri.h \
 AssetLoader.h \
     rayon.h \
     triangle.h \
-    source_facette.h
+    source_facette.h \
+    list_triangle.h
 
 

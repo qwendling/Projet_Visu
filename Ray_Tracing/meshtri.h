@@ -6,6 +6,8 @@
 #include <OGLRender/shaderprogramphong.h>
 
 #include <matrices.h>
+#include "list_triangle.h"
+#include "triangle.h"
 
 
 class MeshTri
@@ -135,6 +137,7 @@ public:
 	 */
 	void compute_normals();
 
+    List_triangle get_triangle();
 };
 
 #endif // MESHTRI_H
