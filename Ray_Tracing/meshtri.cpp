@@ -194,8 +194,6 @@ void MeshTri::create_spirale()
 	gl_update();
 }
 
-
-
 void MeshTri::compute_normals()
 {
 	// ALGO:
@@ -235,10 +233,16 @@ void MeshTri::compute_normals()
 
 }
 
-List_triangle MeshTri::get_triangle(){
-    List_triangle result;
+void MeshTri::set_list_triangle(){
     for(int i=0;i<(int)m_indices.size()-1;i+=3){
-        result.push_back(Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]));
+        list_triangle.push_back(Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]));
     }
-    return result;
 }
+
+List_triangle MeshTri::get_list_triangle(){
+    return list_triangle;
+}
+
+
+
+

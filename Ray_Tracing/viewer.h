@@ -12,6 +12,8 @@
 #include <iostream>
 
 #include "list_triangle.h"
+#include "rayon.h"
+#include "triangle.h"
 
 /**
  * @brief The Viewer class
@@ -28,13 +30,15 @@ public:
     int nb_mesh;
     std::vector<MeshTri> t_mesh;
     void mousePressEvent(QMouseEvent* event);
-    qglviewer::Vec P1;
-    qglviewer::Vec P2;
 
+    //Line de Debug
     qglviewer::Vec orig;
     qglviewer::Vec dir;
 
-    List_triangle tris;
+    //Point Intersection Debug
+    Triangle tri_inter;
+    qglviewer::Vec pts_inter;
+    bool hasIntersection = false;
 
 protected:
 	/// OpenGL intialisation appelee par la QGLViewer
@@ -51,6 +55,9 @@ protected:
     /// draw une ligne de debug
     void draw_debug_line();
     virtual void postSelection(const QPoint &point);
+
+    /// draw interesction point if exist
+    void draw_debug_inter_pts();
 
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentModelViewMatrix() const;

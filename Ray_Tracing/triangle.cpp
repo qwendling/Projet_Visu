@@ -17,6 +17,9 @@ Triangle::Triangle(Vec3 s1, Vec3 s2, Vec3 s3)
     this->normal = computeNormal();
 }
 
+Triangle::Triangle(){
+
+}
 
 Vec3 Triangle::computeNormal(){
     Vec3 v12 = s_2-s_1;
@@ -49,4 +52,9 @@ bool Triangle::is_points_in_triangle(const Vec3& P) const
 
 
     return T1 && T2 && T3;
+}
+
+
+void Triangle::debugTriangle(){
+    std::cout << s_1 << " | " << s_2 << " | " << s_3 << " | " << std::endl;
 }

@@ -70,6 +70,7 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
             }
         }
 
+        Tmesh.set_list_triangle();
     }
     return true;
 }

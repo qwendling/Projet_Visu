@@ -41,7 +41,7 @@ class MeshTri
 	 */
 	std::vector<Vec3> tourne(const std::vector<Vec3>& poly);
 
-
+    List_triangle list_triangle;
 
 public:
 	MeshTri();
@@ -137,7 +137,11 @@ public:
 	 */
 	void compute_normals();
 
-    List_triangle get_triangle();
+    ///Init la list des triangles
+    void set_list_triangle();
+
+    /// Retourne la liste de triangle du mesh
+    List_triangle get_list_triangle();
 };
 
 #endif // MESHTRI_H

@@ -94,6 +94,10 @@ void Viewer::draw()
    //Dessine la Ligne de Debug
    draw_debug_line();
 
+   if(hasIntersection){
+       draw_debug_inter_pts();
+   }
+
 }
 
 
@@ -190,10 +194,41 @@ void Viewer::draw_debug_line(){
 
 }
 
+
+void Viewer::draw_debug_inter_pts(){
+    glPointSize(10.0);
+    glColor3f(0.0, 0.0, 1.0);
+    glBegin(GL_POINTS);
+    glVertex3fv(pts_inter);
+    glEnd();
+
+}
+
 //Shift + clic action
 void Viewer::postSelection(const QPoint &point)
 {
     camera()->convertClickToLine(point, orig, dir);
+
+    Vec3 o (orig[0],orig[1],orig[2]);
+    Vec3 d (dir[0],dir[1],dir[2]);
+
+    Rayon r (o,d);
+    Vec3 pts;
+
+
+
+    for(int i=0; i < t_mesh.size();i++){
+        List_triangle list =  t_mesh[i].get_list_triangle();
+        if(r.intersecListeTri(list,tri_inter,pts)){
+            hasIntersection = true;
+            break;
+        }else {
+            hasIntersection = false;
+        }
+    }
+
+    pts_inter.setValue(pts[0], pts[1], pts[2]);
+
     update();
 }
 
