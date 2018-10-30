@@ -52,7 +52,9 @@ void Viewer::init()
 	// initialisation variables globales
 	m_compteur = 0;
 
-	m_mesh.gl_init();
+
+
+    m_mesh.gl_init();
     for(unsigned i=0;i<t_mesh.size();i++){
         t_mesh[i].gl_init();
     }
@@ -88,6 +90,10 @@ void Viewer::draw()
 
 	if (m_render_mode==1)
         m_mesh.draw_smooth(ROUGE);
+
+   //Dessine la Ligne de Debug
+   draw_debug_line();
+
 }
 
 
@@ -173,26 +179,27 @@ Mat4 Viewer::getCurrentProjectionMatrix() const
 }
 
 
-void Viewer::rayClick(QMouseEvent* event, qglviewer::Vec& P, qglviewer::Vec& Q)
+void Viewer::draw_debug_line(){
+
+    glLineWidth(2.0);
+    glColor3f(0.0, 1.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex3fv(orig);
+    glVertex3fv(orig + 100.0 * dir);
+    glEnd();
+
+}
+
+//Shift + clic action
+void Viewer::postSelection(const QPoint &point)
 {
-    P = camera()->unprojectedCoordinatesOf(qglviewer::Vec(event->x(), event->y(), -1.0));
-    Q = camera()->unprojectedCoordinatesOf(qglviewer::Vec(event->x(), event->y(), 1.0));
+    camera()->convertClickToLine(point, orig, dir);
+    update();
 }
 
 void Viewer::mousePressEvent(QMouseEvent* event)
 {
-    qglviewer::Vec P;
-    qglviewer::Vec Q;
-    rayClick(event, P, Q);
-    Vec3 A(P[0], P[1], P[2]);
-    Vec3 B(Q[0], Q[1], Q[2]);
-
-
-    if ((event->modifiers() & Qt::ShiftModifier))
-    {
-
-    }
-
     QGLViewer::mousePressEvent(event);
     update();
+
 }

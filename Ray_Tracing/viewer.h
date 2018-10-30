@@ -9,6 +9,7 @@
 #include <primitives.h>
 #include <meshtri.h>
 #include "AssetLoader.h"
+#include <iostream>
 
 #include "list_triangle.h"
 
@@ -26,10 +27,13 @@ public:
     void loadMesh(const std::string filename);
     int nb_mesh;
     std::vector<MeshTri> t_mesh;
-    void rayClick(QMouseEvent* event, qglviewer::Vec& P, qglviewer::Vec& Q);
     void mousePressEvent(QMouseEvent* event);
     qglviewer::Vec P1;
     qglviewer::Vec P2;
+
+    qglviewer::Vec orig;
+    qglviewer::Vec dir;
+
     List_triangle tris;
 
 protected:
@@ -44,7 +48,9 @@ protected:
 	/// callback when key pressed
     void keyPressEvent(QKeyEvent *e);
 
-
+    /// draw une ligne de debug
+    void draw_debug_line();
+    virtual void postSelection(const QPoint &point);
 
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentModelViewMatrix() const;
