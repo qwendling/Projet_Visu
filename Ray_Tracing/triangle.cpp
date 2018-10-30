@@ -27,7 +27,7 @@ Vec3 Triangle::computeNormal(){
     return normal / normal.length();
 }
 
-bool Triangle::is_points_in_triangle(const Vec3& P)
+bool Triangle::is_points_in_triangle(const Vec3& P) const
 {
     // On sait que P est dans le plan du quad.
 

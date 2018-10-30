@@ -20,7 +20,7 @@ public:
     Triangle(Vec3 s1, Vec3 s2, Vec3 s3);
 
     Vec3 computeNormal();
-    bool is_points_in_triangle(const Vec3& P);
+    bool is_points_in_triangle(const Vec3& P)const;
 };
 
 #endif // TRIANGLE_H
