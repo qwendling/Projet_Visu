@@ -18,6 +18,7 @@ protected:
 public:
     Cell()=delete;
     Cell(double xmin,double ymin,double zmin,double xmax,double ymax,double zmax):_xmin(xmin),_ymin(ymin),_zmin(zmin),_xmax(xmax),_ymax(ymax),_zmax(zmax){}
+    Cell(Vec3& min,Vec3& max):Cell(min.x,min.y,min.z,max.x,max.y,max.z){}
     double get_xmin()const{return _xmin;}
     double get_ymin()const{return _ymin;}
     double get_zmin()const{return _zmin;}

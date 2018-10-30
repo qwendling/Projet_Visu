@@ -14,7 +14,7 @@ protected:
     std::vector<Cell> liste_cell;
 public:
     Grid()=delete;
-    Grid(List_triangle& list);
+    Grid(List_triangle& list, unsigned def);
 };
 
 #endif // GRID_H
