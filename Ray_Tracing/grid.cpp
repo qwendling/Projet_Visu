@@ -14,7 +14,8 @@ Grid::Grid(List_triangle &list,unsigned def){
     for(;xmin.x<max.x;xmin+=step_x){
         for(Vec3 ymin = xmin;ymin.y<max.y;ymin+=step_y){
             for(Vec3 zmin = ymin;zmin.z<max.z;zmin+=step_z){
-                this->liste_cell.push_back(Cell(zmin,zmin+step_global));
+                Vec3 zmax = zmin+step_global;
+                this->liste_cell.push_back(Cell(zmin,zmax));
             }
         }
     }
