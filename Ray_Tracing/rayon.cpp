@@ -58,10 +58,8 @@ bool Rayon::intersecListeTri(List_triangle& liste,Triangle& t_inter,Vec3& p_inte
             }
         }
     });
-
     auto inter_pair = std::min_element(liste_inter.begin(),liste_inter.end(),compare_intersection_foncteur(*this));
     t_inter = inter_pair->first;
     p_inter = inter_pair->second;
-
     return result;
 }

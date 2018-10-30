@@ -6,4 +6,6 @@
 
 using List_triangle = std::vector<Triangle>;
 
+
+
 #endif // LIST_TRIANGLE_H
