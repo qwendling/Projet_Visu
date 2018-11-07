@@ -19,7 +19,7 @@ public:
     Triangle(Vec3 s1, Vec3 s2, Vec3 s3);
     Triangle();
 
-    Vec3 computeNormal();
+    Vec3 computeNormal()const;
     bool is_points_in_triangle(const Vec3& P)const;
     void debugTriangle();
 

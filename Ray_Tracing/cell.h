@@ -5,7 +5,6 @@
 #include <vector>
 #include <algorithm>
 
-
 class Cell{
 protected:
     double _xmin;
@@ -31,6 +30,9 @@ public:
 
     static Cell get_AABB(const List_triangle &list);
     bool insertect_tri(const Triangle& t);
+    bool intersect_plane(const Vec3& normal,const Vec3& p);
+    inline Vec3 get_center()const{Vec3 v = get_min()+get_max();return Vec3(v.x/2,v.y/2,v.z/2);}
+    inline Vec3 get_half_size()const{return get_max()-get_center();}
 
 };
 

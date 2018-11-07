@@ -21,7 +21,7 @@ Triangle::Triangle(){
 
 }
 
-Vec3 Triangle::computeNormal(){
+Vec3 Triangle::computeNormal() const{
     Vec3 v12 = s_2-s_1;
     Vec3 v13 = s_3-s_1;
 
