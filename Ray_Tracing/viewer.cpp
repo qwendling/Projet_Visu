@@ -2,7 +2,7 @@
 
 #include <QKeyEvent>
 #include <iomanip>
-
+#include <GL/glut.h>
 
 Viewer::Viewer():
 	QGLViewer(),
@@ -15,7 +15,8 @@ Viewer::Viewer():
 	MAGENTA(1,0,1),
 	BLANC(1,1,1),
 	GRIS(0.5,0.5,0.5),
-    NOIR(0,0,0)
+    NOIR(0,0,0),
+    isRendu(false)
 {
     _Loader = new AssetLoader();
 }
@@ -62,6 +63,79 @@ void Viewer::init()
 
 
 
+void Viewer::paintEvent(QPaintEvent *event) {
+
+  Q_UNUSED(event)
+  QPainter painter;
+  painter.begin(this);
+  painter.setRenderHint(QPainter::Antialiasing);
+
+  // Save current OpenGL state
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+
+  // Reset OpenGL parameters
+  glShadeModel(GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_MULTISAMPLE);
+  static GLfloat lightPosition[4] = {1.0, 5.0, 5.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+  glClearColor(backgroundColor().redF(), backgroundColor().greenF(),
+               backgroundColor().blueF(), backgroundColor().alphaF());
+
+  // Classical 3D drawing, usually performed by paintGL().
+  preDraw();
+  draw();
+  postDraw();
+  // Restore OpenGL state
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glPopAttrib();
+
+  drawOverpaint(&painter);
+
+  painter.end();
+}
+
+void Viewer::drawOverpaint(QPainter *painter) {
+
+    if(!isRendu){
+        return;
+    }
+
+  painter->save();
+  painter->translate(width() / 2, height() / 2);
+  QPen pen;
+
+  int W = width();
+  int H = height();
+  for (int j=-H/2; j<H/2; j++)
+  {
+      for (int i=-W/2; i<W/2; i++)
+      {
+        if(i%20 == 0){
+            pen.setColor(QColor(0,255,0,255));
+            painter->setPen(pen);
+            painter->drawPoint(i,j);
+        }else{
+            pen.setColor(QColor(255,0,255,255));
+            painter->setPen(pen);
+            painter->drawPoint(i,j);
+        }
+      }
+  }
+
+  painter->restore();
+}
+
 
 void Viewer::draw()
 {
@@ -100,6 +174,10 @@ void Viewer::draw()
 
 }
 
+void Viewer::rayTracing(){
+
+}
+
 
 void Viewer::keyPressEvent(QKeyEvent *e)
 {
@@ -114,14 +192,17 @@ void Viewer::keyPressEvent(QKeyEvent *e)
 		break;
 
         case Qt::Key_Enter:
-               std::cout << "Lancer de Rayon ! Yahouu" << std::endl;
+               isRendu = !isRendu;
         break;
 		default:
 			break;
 	}
 
 	// retrace la fenetre
-	updateGL();
+
+    update();
+
+
     //QGLViewer::keyPressEvent(e);
 }
 
@@ -213,11 +294,18 @@ void Viewer::postSelection(const QPoint &point)
 
 void Viewer::mousePressEvent(QMouseEvent* event)
 {
+    switch(event->button())
+    {
+        case Qt::LeftButton:
+        {
+            //testRendu(event->x(),event->y());
+        }
+        break;
+    }
+
     QGLViewer::mousePressEvent(event);
     update();
 
 }
 
-void Viewer::rayTracing(){
 
-}

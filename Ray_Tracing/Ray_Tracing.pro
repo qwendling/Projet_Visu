@@ -26,7 +26,7 @@ QMAKE_CXXFLAGS += -DSHADERPATH=$$_PRO_FILE_PWD_
 unix {
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -Wl,-rpath,$$_PRO_FILE_PWD_/../bin
-LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33
+LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33 -lglut
 }
 
 # Windows (64b)
@@ -39,23 +39,27 @@ LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33 -lopengl32
 
 SOURCES += main.cpp \
     viewer.cpp \
-meshtri.cpp \
-AssetLoader.cpp \
+    meshtri.cpp \
+    AssetLoader.cpp \
     rayon.cpp \
     triangle.cpp \
     source_facette.cpp \
     grid.cpp \
-    cell.cpp
+    cell.cpp \
+    view2d.cpp \
+    polygonh.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
-meshtri.h \
-AssetLoader.h \
+    meshtri.h \
+    AssetLoader.h \
     rayon.h \
     triangle.h \
     source_facette.h \
     list_triangle.h \
     grid.h \
-    cell.h
+    cell.h \
+    view2d.h \
+    polygonh.h
 
 

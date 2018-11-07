@@ -40,7 +40,13 @@ public:
     qglviewer::Vec pts_inter;
     bool hasIntersection = false;
 
+    bool isRendu;
+
 protected:
+
+    void testRendu(int x, int y);
+    void drawOverpaint(QPainter *painter);
+    void paintEvent(QPaintEvent *event);
 	/// OpenGL intialisation appelee par la QGLViewer
     void init();
 
