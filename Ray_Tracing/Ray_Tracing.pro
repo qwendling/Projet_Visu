@@ -45,9 +45,7 @@ SOURCES += main.cpp \
     triangle.cpp \
     source_facette.cpp \
     grid.cpp \
-    cell.cpp \
-    view2d.cpp \
-    polygonh.cpp
+    cell.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -58,8 +56,6 @@ HEADERS  += viewer.h \
     source_facette.h \
     list_triangle.h \
     grid.h \
-    cell.h \
-    view2d.h \
-    polygonh.h
+    cell.h
 
 

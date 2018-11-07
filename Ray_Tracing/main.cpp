@@ -1,6 +1,5 @@
 #include <QApplication>
 #include "viewer.h"
-#include "view2d.h"
 #include "AssetLoader.h"
 #include "rayon.h"
 #include "source_facette.h"
