@@ -30,7 +30,7 @@ public:
     Vec3 get_max()const{return Vec3(_xmax,_ymax,_zmax);}
 
     static Cell get_AABB(const List_triangle &list);
-
+    bool insertect_tri(const Triangle& t);
 
 };
 

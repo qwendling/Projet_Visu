@@ -39,3 +39,4 @@ Cell Cell::get_AABB(const List_triangle &list){
 
     return Cell(min_x,min_y,min_z,max_x,max_y,max_z);
 }
+
