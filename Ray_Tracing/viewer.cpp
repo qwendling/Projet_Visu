@@ -109,34 +109,13 @@ void Viewer::keyPressEvent(QKeyEvent *e)
 			exit(EXIT_SUCCESS);
 			break;
 
-		case Qt::Key_F: // touche 'w'
-			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-			break;
-		case Qt::Key_G: // touche 'w'
-			glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-			break;
-
-		case Qt::Key_P:
-			m_mesh.create_pyramide();
-		break;
-
-		case Qt::Key_A:
-			m_mesh.create_anneau();
-		break;
-
-		case Qt::Key_S:
-			m_mesh.create_spirale();
-		break;
-
-		break;
-
-		case Qt::Key_N: // touche 'x'
-				m_mesh.compute_normals();
-		break;
-
 		case Qt::Key_M: // touche 'x'
 				m_render_mode = (m_render_mode+1)%2;
 		break;
+
+        case Qt::Key_Enter:
+               std::cout << "Lancer de Rayon ! Yahouu" << std::endl;
+        break;
 		default:
 			break;
 	}
@@ -236,5 +215,9 @@ void Viewer::mousePressEvent(QMouseEvent* event)
 {
     QGLViewer::mousePressEvent(event);
     update();
+
+}
+
+void Viewer::rayTracing(){
 
 }

@@ -59,6 +59,9 @@ protected:
     /// draw interesction point if exist
     void draw_debug_inter_pts();
 
+    /// Lancer de rayon
+    void rayTracing();
+
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentModelViewMatrix() const;
 
