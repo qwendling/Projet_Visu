@@ -19,4 +19,13 @@ Grid::Grid(List_triangle &list,unsigned def){
             }
         }
     }
+
+    std::for_each(list.begin(),list.end(),[&](Triangle& t){
+        std::for_each(liste_cell.begin(),liste_cell.end(),[&](Cell& c){
+            if(c.insertect_tri(t)){
+                c.t_list.push_back(t);
+            }
+        });
+    });
+    std::remove_if(liste_cell.begin(),liste_cell.end(),[](Cell& c){return c.t_list.empty();});
 }

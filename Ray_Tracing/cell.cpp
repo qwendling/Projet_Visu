@@ -86,9 +86,6 @@ bool Cell::intersect_plane(const Vec3& normal,const Vec3& p){
 }
 
 bool Cell::insertect_tri(const Triangle& t){
-
-
-
     Vec3 v0,v1,v2;
     Vec3 center = get_center();
     v0 = t.s_1 - center;

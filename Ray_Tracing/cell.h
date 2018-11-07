@@ -14,6 +14,7 @@ protected:
     double _xmax;
     double _ymax;
     double _zmax;
+
 public:
     Cell()=delete;
     Cell(double xmin,double ymin,double zmin,double xmax,double ymax,double zmax):_xmin(xmin),_ymin(ymin),_zmin(zmin),_xmax(xmax),_ymax(ymax),_zmax(zmax){}
@@ -33,6 +34,7 @@ public:
     bool intersect_plane(const Vec3& normal,const Vec3& p);
     inline Vec3 get_center()const{Vec3 v = get_min()+get_max();return Vec3(v.x/2,v.y/2,v.z/2);}
     inline Vec3 get_half_size()const{return get_max()-get_center();}
+    List_triangle t_list;
 
 };
 
