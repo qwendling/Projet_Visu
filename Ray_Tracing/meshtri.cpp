@@ -243,9 +243,12 @@ void MeshTri::set_list_triangle(){
 
 void MeshTri::set_DiffuseColor(aiMaterial* mat){
     mat->Get(AI_MATKEY_COLOR_DIFFUSE,color);
+    std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 }
 
 aiColor3D MeshTri::getColor(){
+    std::cout << "get" << std::endl;
+    std::cout << color.r << " " << color.g << " " << color.b << std::endl;
     return color;
 }
 

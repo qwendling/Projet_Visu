@@ -93,8 +93,6 @@ protected:
 	int m_compteur;
 
     /// editeur de polygon
-
-	MeshTri m_mesh;
     AssetLoader* _Loader;
     Grid* grid_;
 };

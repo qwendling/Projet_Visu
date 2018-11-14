@@ -62,8 +62,6 @@ void Viewer::init()
 	m_compteur = 0;
 
 
-
-    m_mesh.gl_init();
     for(unsigned i=0;i<t_mesh.size();i++){
         t_mesh[i].gl_init();
     }
@@ -154,24 +152,17 @@ void Viewer::draw()
         t_mesh[i].gl_update();
     }
 
-	m_mesh.set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
-
     if (m_render_mode==0){
         for(unsigned i=0;i<t_mesh.size();i++){
-            t_mesh[i].draw(ROUGE);
+            t_mesh[i].draw(Vec3(t_mesh[i].getColor().r,t_mesh[i].getColor().g,t_mesh[i].getColor().b));
         }
-		m_mesh.draw(ROUGE);
     }
 
     if (m_render_mode==1){
         for(unsigned i=0;i<t_mesh.size();i++){
-            t_mesh[i].draw_smooth(ROUGE);
+            t_mesh[i].draw_smooth(Vec3(t_mesh[i].getColor().r,t_mesh[i].getColor().g,t_mesh[i].getColor().b));
         }
-        m_mesh.draw_smooth(ROUGE);
     }
-
-	if (m_render_mode==1)
-        m_mesh.draw_smooth(ROUGE);
 
    //Dessine la Ligne de Debug
    draw_debug_line();
