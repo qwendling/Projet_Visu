@@ -8,7 +8,8 @@
 #include <matrices.h>
 #include "list_triangle.h"
 #include "triangle.h"
-
+#include <assimp/material.h>
+#include <assimp/color4.h>
 
 class MeshTri
 {
@@ -42,6 +43,8 @@ class MeshTri
 	std::vector<Vec3> tourne(const std::vector<Vec3>& poly);
 
     List_triangle list_triangle;
+
+    aiColor3D color;
 
 public:
 	MeshTri();
@@ -140,6 +143,8 @@ public:
     ///Init la list des triangles
     void set_list_triangle();
 
+    void set_DiffuseColor(aiMaterial* mat);
+    aiColor3D getColor();
     /// Retourne la liste de triangle du mesh
     List_triangle get_list_triangle();
 };

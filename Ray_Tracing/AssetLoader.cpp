@@ -41,6 +41,8 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
     pIndices.resize(_scene->mNumMeshes);*/
     pMesh.resize(_scene->mNumMeshes);
 
+    aiMaterial** mat = _scene->mMaterials;
+
     for(unsigned int m=0;m < _scene->mNumMeshes;++m){
         /*vector<glm::vec3>& vertices = pVertices[m];
         vector<glm::vec3>& normals = pNormales[m];
@@ -70,7 +72,11 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
             }
         }
 
+        Tmesh.set_DiffuseColor(mat[m]);
         Tmesh.set_list_triangle();
     }
+
+
+
     return true;
 }

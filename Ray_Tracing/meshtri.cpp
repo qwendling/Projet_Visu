@@ -235,8 +235,18 @@ void MeshTri::compute_normals()
 
 void MeshTri::set_list_triangle(){
     for(int i=0;i<(int)m_indices.size()-1;i+=3){
-        list_triangle.push_back(Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]));
+        Triangle tri = Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]);
+        tri.color = this->color;
+        list_triangle.push_back(tri);
     }
+}
+
+void MeshTri::set_DiffuseColor(aiMaterial* mat){
+    mat->Get(AI_MATKEY_COLOR_DIFFUSE,color);
+}
+
+aiColor3D MeshTri::getColor(){
+    return color;
 }
 
 List_triangle MeshTri::get_list_triangle(){
