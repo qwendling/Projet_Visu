@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 #include <iomanip>
 #include <GL/glut.h>
+#define RESOLUTION_GRID 10
 
 Viewer::Viewer():
 	QGLViewer(),
@@ -29,6 +30,13 @@ void Viewer::loadMesh(const std::string filename){
 
     assert(loadOk);
     nb_mesh = _Loader->_scene->mNumMeshes;
+
+    List_triangle lt;
+
+    for(int i=0;nb_mesh<nb_mesh;i++){
+        lt.insert(lt.end(),t_mesh[i].get_list_triangle().begin(),t_mesh[i].get_list_triangle().end());
+    }
+    this->grid_ = new Grid(lt,RESOLUTION_GRID);
 }
 
 void Viewer::init()

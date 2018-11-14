@@ -14,6 +14,7 @@
 #include "list_triangle.h"
 #include "rayon.h"
 #include "triangle.h"
+#include "grid.h"
 
 /**
  * @brief The Viewer class
@@ -95,6 +96,7 @@ protected:
 
 	MeshTri m_mesh;
     AssetLoader* _Loader;
+    Grid* grid_;
 };
 
 #endif
