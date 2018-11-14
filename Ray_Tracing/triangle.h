@@ -25,6 +25,8 @@ public:
     bool is_points_in_triangle(const Vec3& P)const;
     void debugTriangle();
 
+    friend std::ostream &operator<<(std::ostream &out,const Triangle& t);
+
 };
 
 #endif // TRIANGLE_H

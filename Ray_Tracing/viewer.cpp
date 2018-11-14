@@ -34,11 +34,32 @@ void Viewer::loadMesh(const std::string filename){
     List_triangle lt;
 
     for(int i=0;i<nb_mesh;i++){
-        for(auto& v:t_mesh[i].get_list_triangle())
+        for(auto& v:t_mesh[i].get_list_triangle()){
+            std::cout << v << std::endl;
             lt.push_back(v);
+        }
     }
-    std::cout  << "test" << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
+    int i=0;
+    for(auto& c:grid_->liste_cell){
+        for(auto& c2:c){
+            for(auto& c3:c2){
+                List_triangle tmp = c3.triangule();
+                if(!c3.t_list.empty())
+                    for(auto& t:tmp){
+                        debug.add_vertex(t.s_1);
+                        debug.add_vertex(t.s_2);
+                        debug.add_vertex(t.s_3);
+
+                        debug.add_tri(i,i+1,i+2);
+                        i+=3;
+                    }
+
+            }
+        }
+    }
+
+
 }
 
 void Viewer::init()
@@ -67,6 +88,7 @@ void Viewer::init()
     for(unsigned i=0;i<t_mesh.size();i++){
         t_mesh[i].gl_init();
     }
+    debug.gl_init();
 }
 
 
@@ -153,17 +175,21 @@ void Viewer::draw()
         t_mesh[i].set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
         t_mesh[i].gl_update();
     }
+    debug.set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
+    debug.gl_update();
 
     if (m_render_mode==0){
         for(unsigned i=0;i<t_mesh.size();i++){
             t_mesh[i].draw(Vec3(t_mesh[i].getColor().r,t_mesh[i].getColor().g,t_mesh[i].getColor().b));
         }
+        debug.draw(VERT);
     }
 
     if (m_render_mode==1){
         for(unsigned i=0;i<t_mesh.size();i++){
             t_mesh[i].draw_smooth(Vec3(t_mesh[i].getColor().r,t_mesh[i].getColor().g,t_mesh[i].getColor().b));
         }
+        debug.draw_smooth(VERT);
     }
 
    //Dessine la Ligne de Debug

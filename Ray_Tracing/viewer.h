@@ -30,6 +30,7 @@ public:
     void loadMesh(const std::string filename);
     int nb_mesh;
     std::vector<MeshTri> t_mesh;
+    MeshTri debug;
     void mousePressEvent(QMouseEvent* event);
 
     //Line de Debug

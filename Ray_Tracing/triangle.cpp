@@ -8,6 +8,15 @@ Vec3 operator/(const Vec3& v,int x){
     return Vec3(v.x/x,v.y/x,v.z/x);
 }
 
+std::ostream &operator<<(std::ostream &out,const Triangle& t){
+    out << '{';
+    out << "s_1 : " << t.s_1 << "\n";
+    out << "s_2 : " << t.s_2 << "\n";
+    out << "s_3 : " << t.s_3 << "\n";
+    out << '}';
+    return out;
+}
+
 Triangle::Triangle(Vec3 s1, Vec3 s2, Vec3 s3)
 {
     this->s_1 = s1;

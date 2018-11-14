@@ -12,13 +12,14 @@
 class Grid
 {
 protected:
-    std::vector<std::vector<std::vector<Cell>>> liste_cell;
+
     Cell aabb;
     Vec3 step_x;
     Vec3 step_y;
     Vec3 step_z;
     unsigned N;
 public:
+    std::vector<std::vector<std::vector<Cell>>> liste_cell;
     Grid()=delete;
     Grid(List_triangle& list, unsigned def);
 
