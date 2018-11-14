@@ -117,66 +117,6 @@ bool Cell::insertect_tri(const Triangle& t){
     v2 = t.s_3 - center;
 
     Vec3 extents = get_half_size();
-    /*auto axistest_X01 = [&](double a,double b,double fa,double fb)->bool{
-        double p0 = a*v0.y - b*v0.z;
-        double p2 = a*v2.y - b*v2.z;
-        double min,max;
-        if(p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
-        double rad = fa * boxhalfsize.y + fb * boxhalfsize.z;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };
-
-    auto axistest_X2 = [&](double a,double b,double fa,double fb)->bool{
-        double p0 = a*v0.y - b*v0.z;
-        double p1 = a*v2.y - b*v2.z;
-        double min,max;
-        if(p0<p1) {min=p0; max=p1;} else {min=p1; max=p0;}
-        double rad = fa * boxhalfsize.y + fb * boxhalfsize.z;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };
-
-    auto axistest_Y02= [&](double a,double b,double fa,double fb)->bool{
-        double p0 = -a*v0.y + b*v0.z;
-        double p2 = -a*v2.y + b*v2.z;
-        double min,max;
-        if(p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
-        double rad = fa * boxhalfsize.x + fb * boxhalfsize.z;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };
-
-    auto axistest_Y1 = [&](double a,double b,double fa,double fb)->bool{
-        double p0 = -a*v0.y + b*v0.z;
-        double p2 = -a*v1.y + b*v1.z;
-        double min,max;
-        if(p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
-        double rad = fa * boxhalfsize.x + fb * boxhalfsize.z;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };
-
-    auto axistest_Z12 = [&](double a,double b,double fa,double fb)->bool{
-        double p0 = a*v1.y - b*v1.z;
-        double p2 = a*v2.y - b*v2.z;
-        double min,max;
-        if(p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
-        double rad = fa * boxhalfsize.x + fb * boxhalfsize.y;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };
-
-    auto axistest_Z0 = [&](double a,double b,double fa,double fb)->bool{
-        double p0 = a*v0.y - b*v0.z;
-        double p2 = a*v1.y - b*v1.z;
-        double min,max;
-        if(p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
-        double rad = fa * boxhalfsize.x + fb * boxhalfsize.y;
-        if(min>rad || max<-rad) return false;
-        return true;
-    };*/
-
 
     Vec3 e0,e1,e2;
 
@@ -324,53 +264,6 @@ bool Cell::insertect_tri(const Triangle& t){
          return false;
 
        }
-
-/*
-    double fex,fey,fez;
-
-
-    fex = fabs(e0.x);
-    fey = fabs(e0.y);
-    fez = fabs(e0.z);
-    if(!axistest_X01(e0.z,e0.y,fez,fey))
-        return false;
-    if(!axistest_Y02(e0.z,e0.x,fez,fex))
-        return false;
-    if(!axistest_Z12(e0.y,e0.x,fey,fex))
-        return false;
-
-    fex = fabs(e1.x);
-    fey = fabs(e1.y);
-    fez = fabs(e1.z);
-    if(!axistest_X01(e1.z,e1.y,fez,fey))
-        return false;
-    if(!axistest_Y02(e1.z,e1.x,fez,fex))
-        return false;
-    if(!axistest_Z0(e1.y,e1.x,fey,fex))
-        return false;
-
-    fex = fabs(e2.x);
-    fey = fabs(e2.y);
-    fez = fabs(e2.z);
-    if(!axistest_X2(e2.z,e2.y,fez,fey))
-        return false;
-    if(!axistest_Y1(e2.z,e2.x,fez,fex))
-        return false;
-    if(!axistest_Z12(e2.y,e2.x,fey,fex))
-        return false;
-
-    auto min_max = std::minmax({v0.x,v1.x,v2.x});
-
-
-    if(min_max.first>boxhalfsize.x || min_max.second<-boxhalfsize.x) return false;
-
-    min_max = std::minmax({v0.y,v1.y,v2.y});
-
-    if(min_max.first>boxhalfsize.y || min_max.second<-boxhalfsize.y) return false;
-
-    min_max = std::minmax({v0.z,v1.z,v2.z});
-
-    if(min_max.first>boxhalfsize.z || min_max.second<-boxhalfsize.z) return false;*/
 
     return intersect_plane(t.computeNormal(),v0);
 }

@@ -41,7 +41,7 @@ void Viewer::loadMesh(const std::string filename){
     }
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
     int i=0;
-    for(auto& c:grid_->liste_cell){
+    /*for(auto& c:grid_->liste_cell){
         for(auto& c2:c){
             for(auto& c3:c2){
                 List_triangle tmp = c3.triangule();
@@ -57,7 +57,7 @@ void Viewer::loadMesh(const std::string filename){
 
             }
         }
-    }
+    }*/
 
 
 }

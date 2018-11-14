@@ -85,6 +85,16 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     cube.y = static_cast<int>(pos.y);
     cube.z = static_cast<int>(pos.z);
 
+    if(cube.x == N){
+        cube.x -=1;
+    }
+    if(cube.y == N){
+        cube.y -=1;
+    }
+    if(cube.z == N){
+        cube.z -=1;
+    }
+
     Vec3 rayDir = r.get_direction();
     tDelta.x = sqrt(1 + (rayDir.y*rayDir.y)/(rayDir.x*rayDir.x) + (rayDir.z*rayDir.z)/(rayDir.x*rayDir.x));
     tDelta.y = sqrt(1 + (rayDir.x*rayDir.x)/(rayDir.y*rayDir.y) + (rayDir.z*rayDir.z)/(rayDir.y*rayDir.y));
