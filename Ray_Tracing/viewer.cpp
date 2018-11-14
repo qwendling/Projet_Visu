@@ -33,9 +33,11 @@ void Viewer::loadMesh(const std::string filename){
 
     List_triangle lt;
 
-    for(int i=0;nb_mesh<nb_mesh;i++){
-        lt.insert(lt.end(),t_mesh[i].get_list_triangle().begin(),t_mesh[i].get_list_triangle().end());
+    for(int i=0;i<nb_mesh;i++){
+        for(auto& v:t_mesh[i].get_list_triangle())
+            lt.push_back(v);
     }
+    std::cout  << "test" << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
 }
 
@@ -279,6 +281,8 @@ void Viewer::postSelection(const QPoint &point)
     for(int i=0; i < t_mesh.size();i++){
         List_triangle list =  t_mesh[i].get_list_triangle();
         if(r.intersecListeTri(list,tri_inter,pts)){
+            pts = Vec3();
+            this->grid_->intersec_ray(r,tri_inter,pts);
             hasIntersection = true;
             break;
         }else {

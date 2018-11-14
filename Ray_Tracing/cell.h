@@ -16,7 +16,7 @@ protected:
     double _zmax;
 
 public:
-    Cell()=delete;
+    Cell(){}
     Cell(double xmin,double ymin,double zmin,double xmax,double ymax,double zmax):_xmin(xmin),_ymin(ymin),_zmin(zmin),_xmax(xmax),_ymax(ymax),_zmax(zmax){}
     Cell(Vec3& min,Vec3& max):Cell(min.x,min.y,min.z,max.x,max.y,max.z){}
     double get_xmin()const{return _xmin;}
@@ -35,6 +35,7 @@ public:
     inline Vec3 get_center()const{Vec3 v = get_min()+get_max();return Vec3(v.x/2,v.y/2,v.z/2);}
     inline Vec3 get_half_size()const{return get_max()-get_center();}
     List_triangle t_list;
+    List_triangle triangule()const;
 
 };
 

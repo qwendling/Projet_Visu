@@ -206,3 +206,40 @@ bool Cell::insertect_tri(const Triangle& t){
 
     return intersect_plane(t.computeNormal(),v0);
 }
+
+
+List_triangle Cell::triangule()const{
+    Vec3 p1 = Vec3(_xmin,_ymin,_zmin);
+    Vec3 p2 = Vec3(_xmax,_ymin,_zmin);
+    Vec3 p3 = Vec3(_xmax,_ymax,_zmin);
+    Vec3 p4 = Vec3(_xmin,_ymax,_zmin);
+
+    Vec3 p5 = Vec3(_xmin,_ymin,_zmax);
+    Vec3 p6 = Vec3(_xmax,_ymin,_zmax);
+    Vec3 p7 = Vec3(_xmax,_ymax,_zmax);
+    Vec3 p8 = Vec3(_xmin,_ymax,_zmax);
+
+    List_triangle lt;
+
+    lt.push_back(Triangle(p1,p2,p3));
+    lt.push_back(Triangle(p1,p4,p3));
+
+    lt.push_back(Triangle(p1,p5,p8));
+    lt.push_back(Triangle(p1,p4,p8));
+
+    lt.push_back(Triangle(p1,p2,p6));
+    lt.push_back(Triangle(p1,p5,p6));
+
+    lt.push_back(Triangle(p7,p8,p4));
+    lt.push_back(Triangle(p7,p3,p4));
+
+    lt.push_back(Triangle(p7,p8,p5));
+    lt.push_back(Triangle(p7,p6,p5));
+
+    lt.push_back(Triangle(p7,p6,p2));
+    lt.push_back(Triangle(p7,p3,p2));
+
+    std::cout << p1 << std::endl;
+    std::cout << p7 << std::endl;
+    return lt;
+}
