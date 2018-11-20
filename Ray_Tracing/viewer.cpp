@@ -28,8 +28,12 @@ void Viewer::loadMesh(const std::string filename){
     assert(statusOk);
     bool loadOk = _Loader->loadData(t_mesh);
 
+    std::cout << "Load data : OK  " << std::endl;
+
     assert(loadOk);
     nb_mesh = _Loader->_scene->mNumMeshes;
+
+
 
     List_triangle lt;
 
@@ -39,6 +43,7 @@ void Viewer::loadMesh(const std::string filename){
             lt.push_back(v);
         }
     }
+    std::cout << "hum 2 " << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
     int i=0;
     /*for(auto& c:grid_->liste_cell){
@@ -59,7 +64,7 @@ void Viewer::loadMesh(const std::string filename){
         }
     }*/
 
-
+    std::cout << "Viewer load mesh : OK " << std::endl;
 }
 
 void Viewer::init()

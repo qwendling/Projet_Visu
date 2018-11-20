@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
     //QGLFormat::setDefaultFormat(glFormat);
 
     Viewer view;
-    view.loadMesh("../Model3D/cube.obj");
+    view.loadMesh("../scene.obj");
     view.setGeometry(10,20,500,500);
+    view.setSceneRadius(10000);
     view.show();
 
     return a.exec();

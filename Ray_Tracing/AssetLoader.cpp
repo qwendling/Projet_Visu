@@ -28,6 +28,7 @@ bool AssetLoader::import(const std::string filename){
         std::cout << _importer->GetErrorString() << std::endl;
         return false;
     }
+    std::cout << "Import : OK" << std::endl;
     return true;
 }
 
@@ -43,25 +44,29 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
 
     aiMaterial** mat = _scene->mMaterials;
 
-    for(unsigned int m=0;m < _scene->mNumMeshes;++m){
+    for(unsigned int m=0;m < _scene->mNumMeshes;m++){
         /*vector<glm::vec3>& vertices = pVertices[m];
         vector<glm::vec3>& normals = pNormales[m];
         vector<unsigned int>& indices = pIndices[m];*/
         MeshTri& Tmesh = pMesh[m];
 
         const aiMesh* mesh = _scene->mMeshes[m];
+
+
         if(mesh->HasPositions()){
             //vertices.resize(mesh->mNumVertices);
             for(unsigned int v=0;v<mesh->mNumVertices;++v){
                 const aiVector3D& vertex = mesh->mVertices[v];
                 Tmesh.add_vertex(glm::vec3(vertex.x,vertex.y,vertex.z));
             }
+
             //indices.resize(mesh->mNumFaces * 3);
             for(unsigned int f=0;f< mesh->mNumFaces;++f){
                 const struct aiFace& face = mesh->mFaces[f];
                 assert(face.mNumIndices == 3);
                 Tmesh.add_tri(face.mIndices[0],face.mIndices[1],face.mIndices[2]);
             }
+
             if(mesh->HasNormals()){
                 //normals.resize(mesh->mNumVertices);
                 for(unsigned int n=0;n<mesh->mNumVertices;++n){
@@ -71,12 +76,12 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
                 }
             }
         }
-
-        Tmesh.set_DiffuseColor(mat[m]);
+        if(m<_scene->mNumMaterials)
+            Tmesh.set_DiffuseColor(mat[m]);
         Tmesh.set_list_triangle();
     }
 
-
+    std::cout << "load data print 3" <<  std::endl;
 
     return true;
 }
