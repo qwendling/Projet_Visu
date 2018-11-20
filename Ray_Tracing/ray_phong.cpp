@@ -26,5 +26,8 @@ void Ray_phong::compute_phong(){
                 Image[i][j] = Vec3(Background_color.red(),Background_color.green(),Background_color.blue());
             }
         }
+        if(i%40 == 0)
+            emit update_draw();
     }
+    emit update_draw();
 }

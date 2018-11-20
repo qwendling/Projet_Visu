@@ -34,6 +34,7 @@ public:
     bool operator()(const Vec3& a,const Vec3& b)const{
         return _r.dist(a) < _r.dist(b);
     }
+
 };
 
 #endif // RAYON_H

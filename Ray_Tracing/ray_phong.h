@@ -23,6 +23,8 @@ public:
     QColor Background_color;
 
     void compute_phong();
+signals:
+    void update_draw();
 };
 
 #endif // RAY_PHONG_H

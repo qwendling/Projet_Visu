@@ -20,6 +20,7 @@ Viewer::Viewer():
     isRendu(false)
 {
     _Loader = new AssetLoader();
+
 }
 
 
@@ -134,7 +135,7 @@ void Viewer::paintEvent(QPaintEvent *event) {
   glPopMatrix();
   glPopAttrib();
 
-  drawOverpaint(&painter);
+  //drawOverpaint(&painter);
 
   painter.end();
 }
@@ -207,9 +208,9 @@ void Viewer::drawOverpaint(QPainter *painter) {
           pen.setColor(QColor(Image[i+H/2][j+H/2].x,Image[i+H/2][j+H/2].y,Image[i+H/2][j+H/2].z));
           painter->setPen(pen);
           painter->drawPoint(i,j);
+
       }
   }
-
   painter->restore();
 }
 
@@ -258,7 +259,9 @@ void Viewer::rayTracing(){
     }
 
     rp = new Ray_phong(Image,*camera(),*grid_,bck);
+    connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
     rp->compute_phong();
+    initPainter();
 }
 
 
@@ -275,7 +278,7 @@ void Viewer::keyPressEvent(QKeyEvent *e)
 		break;
 
         case Qt::Key_Enter:
-               isRendu = !isRendu;
+               isRendu = true;
                rayTracing();
         break;
 		default:
@@ -283,10 +286,10 @@ void Viewer::keyPressEvent(QKeyEvent *e)
 	}
 
 	// retrace la fenetre
+    if(!isRendu)
+        update();
 
-    update();
-
-
+    isRendu = false;
     //QGLViewer::keyPressEvent(e);
 }
 

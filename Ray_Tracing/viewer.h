@@ -51,7 +51,7 @@ protected:
 
     void testRendu(int x, int y);
     void drawOverpaint(QPainter *painter);
-    void initPainter();
+
     void paintEvent(QPaintEvent *event);
 	/// OpenGL intialisation appelee par la QGLViewer
     void init();
@@ -103,6 +103,8 @@ protected:
     /// editeur de polygon
     AssetLoader* _Loader;
     Grid* grid_;
+private slots:
+    void initPainter();
 
 };
 
