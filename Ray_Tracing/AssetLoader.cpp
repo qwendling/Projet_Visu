@@ -52,7 +52,6 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
 
         const aiMesh* mesh = _scene->mMeshes[m];
 
-
         if(mesh->HasPositions()){
             //vertices.resize(mesh->mNumVertices);
             for(unsigned int v=0;v<mesh->mNumVertices;++v){
@@ -76,8 +75,8 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
                 }
             }
         }
-        if(m<_scene->mNumMaterials)
-            Tmesh.set_DiffuseColor(mat[m]);
+        if(mesh->mMaterialIndex<_scene->mNumMaterials)
+            Tmesh.set_DiffuseColor(mat[mesh->mMaterialIndex]);
         Tmesh.set_list_triangle();
     }
 
