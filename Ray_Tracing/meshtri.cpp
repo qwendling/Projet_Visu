@@ -237,6 +237,7 @@ void MeshTri::set_list_triangle(){
     for(int i=0;i<(int)m_indices.size()-1;i+=3){
         Triangle tri = Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]);
         tri.color = this->color;
+        std::cout << "color : " << tri.color.r << "," << tri.color.g << "," << tri.color.b << std::endl;
         list_triangle.push_back(tri);
     }
 }

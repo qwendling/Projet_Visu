@@ -39,13 +39,12 @@ void Viewer::loadMesh(const std::string filename){
 
     for(int i=0;i<nb_mesh;i++){
         for(auto& v:t_mesh[i].get_list_triangle()){
-            std::cout << v << std::endl;
             lt.push_back(v);
         }
     }
     std::cout << "hum 2 " << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
-    int i=0;
+    int i=0;/*
     for(auto& c:grid_->liste_cell){
         for(auto& c2:c){
             for(auto& c3:c2){
@@ -62,8 +61,7 @@ void Viewer::loadMesh(const std::string filename){
 
             }
         }
-    }
-
+    }*/
     std::cout << "Viewer load mesh : OK " << std::endl;
 }
 
@@ -78,8 +76,9 @@ void Viewer::init()
 	}
 	std::cout << "GL VERSION = " << glGetString(GL_VERSION) << std::endl;
 
+    bck=QColor(40,40,40,255);
 	// la couleur de fond
-	glClearColor(0.2,0.2,0.2,0.0);
+    glClearColor(bck.red()/255,bck.green()/255,bck.blue()/255,0.0);
 
 	// QGLViewer initialisation de la scene
     setSceneRadius(20.0);
@@ -140,6 +139,46 @@ void Viewer::paintEvent(QPaintEvent *event) {
   painter.end();
 }
 
+void Viewer::initPainter(){
+    QPainter painter;
+    painter.begin(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    // Save current OpenGL state
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+
+    // Reset OpenGL parameters
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_MULTISAMPLE);
+    static GLfloat lightPosition[4] = {1.0, 5.0, 5.0, 1.0};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+    glClearColor(backgroundColor().redF(), backgroundColor().greenF(),
+                 backgroundColor().blueF(), backgroundColor().alphaF());
+
+    // Classical 3D drawing, usually performed by paintGL().
+    preDraw();
+    draw();
+    postDraw();
+    // Restore OpenGL state
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glPopAttrib();
+
+    drawOverpaint(&painter);
+
+    painter.end();
+}
+
 void Viewer::drawOverpaint(QPainter *painter) {
 
     if(!isRendu){
@@ -156,7 +195,7 @@ void Viewer::drawOverpaint(QPainter *painter) {
   {
       for (int i=-W/2; i<W/2; i++)
       {
-        if(i%20 == 0){
+        /*if(i%20 == 0){
             pen.setColor(QColor(0,255,0,255));
             painter->setPen(pen);
             painter->drawPoint(i,j);
@@ -164,7 +203,10 @@ void Viewer::drawOverpaint(QPainter *painter) {
             pen.setColor(QColor(255,0,255,255));
             painter->setPen(pen);
             painter->drawPoint(i,j);
-        }
+        }*/
+          pen.setColor(QColor(Image[i+H/2][j+H/2].x,Image[i+H/2][j+H/2].y,Image[i+H/2][j+H/2].z));
+          painter->setPen(pen);
+          painter->drawPoint(i,j);
       }
   }
 
@@ -207,7 +249,16 @@ void Viewer::draw()
 }
 
 void Viewer::rayTracing(){
+    Image.resize(this->width());
+    for(auto& i:Image){
+        i.resize(this->height());
+        for(auto& v:i){
+            v = Vec3(0,0,0);
+        }
+    }
 
+    rp = new Ray_phong(Image,*camera(),*grid_,bck);
+    rp->compute_phong();
 }
 
 
@@ -225,6 +276,7 @@ void Viewer::keyPressEvent(QKeyEvent *e)
 
         case Qt::Key_Enter:
                isRendu = !isRendu;
+               rayTracing();
         break;
 		default:
 			break;
@@ -300,6 +352,8 @@ void Viewer::draw_debug_inter_pts(){
 void Viewer::postSelection(const QPoint &point)
 {
     camera()->convertClickToLine(point, orig, dir);
+
+    std::cout << "(" << point.x() << "," << point.y() << ")" << std::endl;
 
     Vec3 o (orig[0],orig[1],orig[2]);
     Vec3 d (dir[0],dir[1],dir[2]);

@@ -15,6 +15,7 @@
 #include "rayon.h"
 #include "triangle.h"
 #include "grid.h"
+#include "ray_phong.h"
 
 /**
  * @brief The Viewer class
@@ -37,6 +38,8 @@ public:
     qglviewer::Vec orig;
     qglviewer::Vec dir;
 
+    QColor bck;
+
     //Point Intersection Debug
     Triangle tri_inter;
     qglviewer::Vec pts_inter;
@@ -48,6 +51,7 @@ protected:
 
     void testRendu(int x, int y);
     void drawOverpaint(QPainter *painter);
+    void initPainter();
     void paintEvent(QPaintEvent *event);
 	/// OpenGL intialisation appelee par la QGLViewer
     void init();
@@ -76,6 +80,9 @@ protected:
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentProjectionMatrix() const;
 
+    Ray_phong* rp;
+    std::vector<std::vector<Vec3>> Image;
+
     /// 0:flat 1:phong
 	int m_render_mode;
 
@@ -96,6 +103,7 @@ protected:
     /// editeur de polygon
     AssetLoader* _Loader;
     Grid* grid_;
+
 };
 
 #endif

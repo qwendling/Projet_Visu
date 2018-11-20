@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     triangle.cpp \
     source_facette.cpp \
     grid.cpp \
-    cell.cpp
+    cell.cpp \
+    ray_phong.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -56,6 +57,7 @@ HEADERS  += viewer.h \
     source_facette.h \
     list_triangle.h \
     grid.h \
-    cell.h
+    cell.h \
+    ray_phong.h
 
 

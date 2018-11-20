@@ -43,7 +43,6 @@ Grid::Grid(List_triangle &list,unsigned def){
             }
         }
     }
-    std::cout << "AH ! " << std::endl;
     std::for_each(list.begin(),list.end(),[&](Triangle& t){
         for(int i=0;i<def;i++){
             for(int j=0;j<def;j++){
@@ -67,14 +66,12 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     if((r.get_origine().x <= this->aabb.get_xmax() && r.get_origine().y <= this->aabb.get_ymax() && r.get_origine().z <= this->aabb.get_zmax())
             && (r.get_origine().x >= this->aabb.get_xmin() && r.get_origine().y >= this->aabb.get_ymin() && r.get_origine().z >= this->aabb.get_zmin())){
         cube = r.get_origine();
-        std::cout << "camera dedans " << std::endl;
     }else{
         if(!r.intersecListeTri(tmp,tr,cube)){
             return false;
         }
     }
 
-    std::cout << "intersect : " << cube << std::endl;
     Vec3 tMax;
     Vec3 tDelta;
     Vec3 step;
@@ -85,8 +82,7 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     pos.y = N*(cube.y-aabb.get_ymin())/(aabb.get_ymax()-aabb.get_ymin());
     pos.z = N*(cube.z-aabb.get_zmin())/(aabb.get_zmax()-aabb.get_zmin());
 
-    std::cout << "zmax : " << aabb.get_zmax() << std::endl;
-    std::cout << N << " pos : " << pos << std::endl;
+
 
     cube.x = static_cast<int>(pos.x);
     cube.y = static_cast<int>(pos.y);
@@ -148,8 +144,6 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     {
         if(cube.x >= N || cube.y >= N || cube.z >= N || cube.x < 0 || cube.y < 0 || cube.z < 0){
 
-            std::cout << "oups 2" << std::endl;
-            std::cout << cube << std::endl;
             return false;
         }
        if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,t,inter))
