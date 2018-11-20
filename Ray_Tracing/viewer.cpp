@@ -82,7 +82,7 @@ void Viewer::init()
 	glClearColor(0.2,0.2,0.2,0.0);
 
 	// QGLViewer initialisation de la scene
-	setSceneRadius(2.0);
+    setSceneRadius(20.0);
 	setSceneCenter(qglviewer::Vec(0.0,0.0,0.0));
 	camera()->showEntireScene();
 
