@@ -60,11 +60,18 @@ Grid::Grid(List_triangle &list,unsigned def){
 
 bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     Vec3 cube;
+    Vec3 pos;
     Triangle tr;
     List_triangle tmp = aabb.triangule();
-    if(!r.intersecListeTri(tmp,tr,cube)){
-        std::cout << "oups" << std::endl;
-        return false;
+
+    if((r.get_origine().x <= this->aabb.get_xmax() && r.get_origine().y <= this->aabb.get_ymax() && r.get_origine().z <= this->aabb.get_zmax())
+            && (r.get_origine().x >= this->aabb.get_xmin() && r.get_origine().y >= this->aabb.get_ymin() && r.get_origine().z >= this->aabb.get_zmin())){
+        cube = r.get_origine();
+        std::cout << "camera dedans " << std::endl;
+    }else{
+        if(!r.intersecListeTri(tmp,tr,cube)){
+            return false;
+        }
     }
 
     std::cout << "intersect : " << cube << std::endl;
@@ -72,7 +79,7 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     Vec3 tDelta;
     Vec3 step;
 
-    Vec3 pos;
+
 
     pos.x = N*(cube.x-aabb.get_xmin())/(aabb.get_xmax()-aabb.get_xmin());
     pos.y = N*(cube.y-aabb.get_ymin())/(aabb.get_ymax()-aabb.get_ymin());
