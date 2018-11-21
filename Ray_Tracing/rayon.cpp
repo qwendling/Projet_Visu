@@ -67,3 +67,26 @@ bool Rayon::intersecListeTri(List_triangle& liste,Triangle& t_inter,Vec3& p_inte
     }
     return result;
 }
+
+bool Rayon::intersecListeTri(List_triangle &liste, Triangle& t_inter, Vec3& p_inter,Vec3& p_last_inter)const{
+    bool result = false;
+    std::vector<std::pair<Triangle,Vec3>> liste_inter;
+    Vec3 tmp_inter;
+    std::for_each(liste.begin(),liste.end(),[&](Triangle& t){
+        if(this->intersecTri(t,tmp_inter)){
+            if(this->dist(tmp_inter) > 0){
+                liste_inter.push_back(std::make_pair(t,tmp_inter));
+                result = true;
+            }
+        }
+    });
+
+    if(result){
+        auto inter_pair = std::min_element(liste_inter.begin(),liste_inter.end(),compare_intersection_foncteur(*this));
+        t_inter = inter_pair->first;
+        p_inter = inter_pair->second;
+        inter_pair = std::max_element(liste_inter.begin(),liste_inter.end(),compare_intersection_foncteur(*this));
+        p_last_inter = inter_pair->second;
+    }
+    return result;
+}

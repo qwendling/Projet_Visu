@@ -19,6 +19,7 @@ protected:
     Vec3 step_z;
     unsigned N;
 public:
+    List_triangle debug_list;
     std::vector<std::vector<std::vector<Cell>>> liste_cell;
     Grid()=delete;
     Grid(List_triangle& list, unsigned def);

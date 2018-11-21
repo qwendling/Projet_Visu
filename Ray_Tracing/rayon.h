@@ -16,6 +16,7 @@ public:
 
     bool intersecTri(const Triangle t, Vec3 &inter)const;
     bool intersecListeTri(List_triangle &liste, Triangle& t_inter, Vec3& p_inter)const;
+    bool intersecListeTri(List_triangle &liste, Triangle& t_inter, Vec3& p_inter,Vec3& p_last_inter)const;
     Vec3 get_origine()const{return origine;}
     Vec3 get_direction()const{return direction;}
     double dist(const Vec3& v)const;

@@ -45,7 +45,8 @@ void Viewer::loadMesh(const std::string filename){
     }
     std::cout << "hum 2 " << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
-    int i=0;/*
+    /*
+    int i=0;
     for(auto& c:grid_->liste_cell){
         for(auto& c2:c){
             for(auto& c3:c2){
@@ -77,7 +78,7 @@ void Viewer::init()
 	}
 	std::cout << "GL VERSION = " << glGetString(GL_VERSION) << std::endl;
 
-    bck=QColor(40,40,40,255);
+    bck=QColor(40,40,0,255);
 	// la couleur de fond
     glClearColor(bck.red()/255,bck.green()/255,bck.blue()/255,0.0);
 
@@ -205,7 +206,7 @@ void Viewer::drawOverpaint(QPainter *painter) {
             painter->setPen(pen);
             painter->drawPoint(i,j);
         }*/
-          pen.setColor(QColor(Image[i+H/2][j+H/2].x,Image[i+H/2][j+H/2].y,Image[i+H/2][j+H/2].z));
+          pen.setColor(QColor(Image[i+W/2][j+H/2].x,Image[i+W/2][j+H/2].y,Image[i+W/2][j+H/2].z));
           painter->setPen(pen);
           painter->drawPoint(i,j);
 
@@ -262,6 +263,7 @@ void Viewer::rayTracing(){
     connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
     rp->compute_phong();
     initPainter();
+    std::cout << "fin ray trace" << std::endl;
 }
 
 

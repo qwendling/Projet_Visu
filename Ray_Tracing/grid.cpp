@@ -44,6 +44,7 @@ Grid::Grid(List_triangle &list,unsigned def){
         }
     }
     std::for_each(list.begin(),list.end(),[&](Triangle& t){
+        debug_list.push_back(t);
         for(int i=0;i<def;i++){
             for(int j=0;j<def;j++){
                 for(int k=0;k<def;k++){
@@ -63,11 +64,14 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     Triangle tr;
     List_triangle tmp = aabb.triangule();
 
+    //std::cout << "debut dda" << std::endl;
+
     if((r.get_origine().x <= this->aabb.get_xmax() && r.get_origine().y <= this->aabb.get_ymax() && r.get_origine().z <= this->aabb.get_zmax())
             && (r.get_origine().x >= this->aabb.get_xmin() && r.get_origine().y >= this->aabb.get_ymin() && r.get_origine().z >= this->aabb.get_zmin())){
         cube = r.get_origine();
     }else{
         if(!r.intersecListeTri(tmp,tr,cube)){
+            //std::cout << "dehors " << std::endl;
             return false;
         }
     }
@@ -75,6 +79,8 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     Vec3 tMax;
     Vec3 tDelta;
     Vec3 step;
+    Vec3 origin_r = cube;
+
 
 
 
@@ -98,10 +104,19 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
         cube.z -=1;
     }
 
+
+
     Vec3 rayDir = r.get_direction();
+
+#if 0
     tDelta.x = sqrt(1 + (rayDir.y*rayDir.y)/(rayDir.x*rayDir.x) + (rayDir.z*rayDir.z)/(rayDir.x*rayDir.x));
     tDelta.y = sqrt(1 + (rayDir.x*rayDir.x)/(rayDir.y*rayDir.y) + (rayDir.z*rayDir.z)/(rayDir.y*rayDir.y));
     tDelta.z = sqrt(1 + (rayDir.x*rayDir.x)/(rayDir.z*rayDir.z) + (rayDir.y*rayDir.y)/(rayDir.z*rayDir.z));
+
+    tDelta.x = sqrt(1 + (rayDir.y*rayDir.y)/(rayDir.x*rayDir.x) + (rayDir.z*rayDir.z)/(rayDir.x*rayDir.x));
+    tDelta.y = sqrt(1 + (rayDir.x*rayDir.x)/(rayDir.y*rayDir.y) + (rayDir.z*rayDir.z)/(rayDir.y*rayDir.y));
+    tDelta.z = sqrt(1 + (rayDir.x*rayDir.x)/(rayDir.z*rayDir.z) + (rayDir.y*rayDir.y)/(rayDir.z*rayDir.z));
+
 
     if (rayDir.x < 0)
     {
@@ -135,7 +150,51 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
         step.z = 1;
         tMax.z = (ceil(pos.z) - pos.z) *   tDelta.z;
     }
+#else
+    Vec3 rayOrigGrid = origin_r-aabb.get_min();
+    double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/N;
+    double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/N;
+    double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/N;
 
+    if (rayDir.x < 0)
+    {
+        step.x = -1;
+        tDelta.x = - voxellSizeX / r.get_direction().x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+    }
+    else
+    {
+        step.x = 1;
+        tDelta.x = voxellSizeX / r.get_direction().x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX +1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+    }
+
+    if (rayDir.y < 0)
+    {
+        step.y = -1;
+        tDelta.y = - voxellSizeY / r.get_direction().y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+    else
+    {
+        step.y = 1;
+        tDelta.y = voxellSizeY / r.get_direction().y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY +1) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+
+    if (rayDir.z < 0)
+    {
+        step.z = -1;
+        tDelta.z = - voxellSizeZ / r.get_direction().z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+    else
+    {
+        step.z = 1;
+        tDelta.z = voxellSizeZ / r.get_direction().z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ +1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+#endif
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
 
@@ -143,11 +202,12 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
     while (true)
     {
         if(cube.x >= N || cube.y >= N || cube.z >= N || cube.x < 0 || cube.y < 0 || cube.z < 0){
-
+            //std::cout << "rien trouver " << std::endl;
             return false;
         }
        if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,t,inter))
        {
+           //std::cout << "inter find" << std::endl;
           return true;
        }
        if (tMax.x < tMax.y)

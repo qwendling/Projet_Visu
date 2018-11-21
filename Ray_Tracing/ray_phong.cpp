@@ -17,7 +17,6 @@ void Ray_phong::compute_phong(){
 
             Triangle t_inter;
             Vec3 inter;
-
             if(grille.intersec_ray(r,t_inter,inter)){
                 //std::cout << "color : " << t_inter.color.r << "," << t_inter.color.g << "," << t_inter.color.b << std::endl;
                 Image[i][j] = Vec3(255*t_inter.color.r,255*t_inter.color.g,255*t_inter.color.b);
