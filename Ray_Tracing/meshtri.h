@@ -44,7 +44,10 @@ class MeshTri
 
     List_triangle list_triangle;
 
-    aiColor3D color;
+    aiColor3D Kd;
+    aiColor3D Ks;
+    aiColor3D Ka;
+    double Ns;
 
 public:
 	MeshTri();

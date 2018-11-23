@@ -16,7 +16,10 @@ public:
     Vec3 s_1;
     Vec3 s_2;
     Vec3 s_3;
-    aiColor3D color;
+    aiColor3D Kd;
+    aiColor3D Ks;
+    aiColor3D Ka;
+    double Ns;
 
     Triangle(Vec3 s1, Vec3 s2, Vec3 s3);
     Triangle();

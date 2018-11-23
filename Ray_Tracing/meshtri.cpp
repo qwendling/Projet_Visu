@@ -236,21 +236,26 @@ void MeshTri::compute_normals()
 void MeshTri::set_list_triangle(){
     for(int i=0;i<(int)m_indices.size()-1;i+=3){
         Triangle tri = Triangle(m_points[m_indices[i]],m_points[m_indices[i+1]],m_points[m_indices[i+2]]);
-        tri.color = this->color;
-        std::cout << "color : " << tri.color.r << "," << tri.color.g << "," << tri.color.b << std::endl;
+        tri.Kd = this->Kd;
+        tri.Ka = this->Ka;
+        tri.Ks = this->Ks;
+        tri.Ns = this->Ns;
         list_triangle.push_back(tri);
     }
 }
 
 void MeshTri::set_DiffuseColor(aiMaterial* mat){
-    mat->Get(AI_MATKEY_COLOR_DIFFUSE,color);
-    //std::cout << color.r << " " << color.g << " " << color.b << std::endl;
+    mat->Get(AI_MATKEY_COLOR_DIFFUSE,Kd);
+    mat->Get(AI_MATKEY_COLOR_AMBIENT,Ka);
+    mat->Get(AI_MATKEY_COLOR_SPECULAR,Ks);
+    mat->Get(AI_MATKEY_SHININESS,Ns);
+    //std::cout << Kd.r << " " << Kd.g << " " << Kd.b << std::endl;
 }
 
 aiColor3D MeshTri::getColor(){
     /*std::cout << "get" << std::endl;
-    std::cout << color.r << " " << color.g << " " << color.b << std::endl;*/
-    return color;
+    std::cout << Kd.r << " " << Kd.g << " " << Kd.b << std::endl;*/
+    return Kd;
 }
 
 List_triangle MeshTri::get_list_triangle(){
