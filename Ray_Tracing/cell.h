@@ -36,6 +36,7 @@ public:
     inline Vec3 get_half_size()const{return get_max()-get_center();}
     List_triangle t_list;
     List_triangle triangule()const;
+    void draw();
 
 };
 

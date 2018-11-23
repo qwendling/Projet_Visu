@@ -3,7 +3,7 @@
 #include <QKeyEvent>
 #include <iomanip>
 #include <GL/glut.h>
-#define RESOLUTION_GRID 10
+#define RESOLUTION_GRID 20
 
 Viewer::Viewer():
 	QGLViewer(),
@@ -247,6 +247,8 @@ void Viewer::draw()
    if(hasIntersection){
        draw_debug_inter_pts();
    }
+   for(auto& c:cell_passed)
+       c.draw();
 
 }
 
@@ -372,7 +374,8 @@ void Viewer::postSelection(const QPoint &point)
         List_triangle list =  t_mesh[i].get_list_triangle();
         if(r.intersecListeTri(list,tri_inter,pts)){
             pts = Vec3();
-            this->grid_->intersec_ray(r,tri_inter,pts);
+            cell_passed.clear();
+            this->grid_->intersec_ray(r,tri_inter,pts,cell_passed);
             hasIntersection = true;
             break;
         }else {

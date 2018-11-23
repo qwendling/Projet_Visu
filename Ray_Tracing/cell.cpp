@@ -1,6 +1,34 @@
 #include "cell.h"
 
-
+void Cell::draw(){
+    glColor4f(1,0,0,1) ;
+      glBegin(GL_LINES) ;
+      glVertex3f(_xmin,_ymin,_zmin) ;
+      glVertex3f(_xmax,_ymin,_zmin) ;
+      glVertex3f(_xmin,_ymax,_zmin) ;
+      glVertex3f(_xmax,_ymax,_zmin) ;
+      glVertex3f(_xmin,_ymin,_zmax) ;
+      glVertex3f(_xmax,_ymin,_zmax) ;
+      glVertex3f(_xmin,_ymax,_zmax) ;
+      glVertex3f(_xmax,_ymax,_zmax) ;
+      glVertex3f(_xmin,_ymin,_zmin) ;
+      glVertex3f(_xmin,_ymax,_zmin) ;
+      glVertex3f(_xmax,_ymin,_zmin) ;
+      glVertex3f(_xmax,_ymax,_zmin) ;
+      glVertex3f(_xmin,_ymin,_zmax) ;
+      glVertex3f(_xmin,_ymax,_zmax) ;
+      glVertex3f(_xmax,_ymin,_zmax) ;
+      glVertex3f(_xmax,_ymax,_zmax) ;
+      glVertex3f(_xmin,_ymin,_zmin) ;
+      glVertex3f(_xmin,_ymin,_zmax) ;
+      glVertex3f(_xmax,_ymin,_zmin) ;
+      glVertex3f(_xmax,_ymin,_zmax) ;
+      glVertex3f(_xmin,_ymax,_zmin) ;
+      glVertex3f(_xmin,_ymax,_zmax) ;
+      glVertex3f(_xmax,_ymax,_zmin) ;
+      glVertex3f(_xmax,_ymax,_zmax) ;
+      glEnd() ;
+}
 
 Cell Cell::get_AABB(const List_triangle &list){
     std::vector<double> vect_x;

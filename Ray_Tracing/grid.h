@@ -25,6 +25,8 @@ public:
     Grid(List_triangle& list, unsigned def);
 
     bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter);
+    //pour le debug
+    bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,std::vector<Cell>& cell_passed);
 };
 
 #endif // GRID_H

@@ -103,6 +103,7 @@ protected:
     /// editeur de polygon
     AssetLoader* _Loader;
     Grid* grid_;
+    std::vector<Cell> cell_passed;
 private slots:
     void initPainter();
 
