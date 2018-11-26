@@ -37,6 +37,8 @@ public:
     //Line de Debug
     qglviewer::Vec orig;
     qglviewer::Vec dir;
+    qglviewer::Vec orig_light;
+    qglviewer::Vec dir_light;
 
     QColor bck;
 
@@ -96,6 +98,7 @@ protected:
 	Vec3 BLANC;
 	Vec3 GRIS;
 	Vec3 NOIR;
+    Vec3 lumiere;
 
     /// compteur animation
 	int m_compteur;

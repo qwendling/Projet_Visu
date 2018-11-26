@@ -17,7 +17,8 @@ Viewer::Viewer():
 	BLANC(1,1,1),
 	GRIS(0.5,0.5,0.5),
     NOIR(0,0,0),
-    isRendu(false)
+    isRendu(false),
+    lumiere(-27,3.3,0.24)
 {
     _Loader = new AssetLoader();
 
@@ -262,6 +263,7 @@ void Viewer::rayTracing(){
     }
 
     rp = new Ray_phong(Image,*camera(),*grid_,bck);
+    rp->add_lumiere(this->lumiere);
     connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
     rp->compute_phong();
     initPainter();
@@ -284,6 +286,9 @@ void Viewer::keyPressEvent(QKeyEvent *e)
         case Qt::Key_Enter:
                isRendu = true;
                rayTracing();
+        break;
+    case  Qt::Key_P:
+        std::cout << "pos camera : " << camera()->position() << std::endl;
         break;
 		default:
 			break;
@@ -343,6 +348,13 @@ void Viewer::draw_debug_line(){
     glVertex3fv(orig + 100.0 * dir);
     glEnd();
 
+    glLineWidth(2.0);
+    glColor3f(1.0, 1.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex3fv(orig_light);
+    glVertex3fv(orig_light + 100.0 * dir_light);
+    glEnd();
+
 }
 
 
@@ -377,6 +389,13 @@ void Viewer::postSelection(const QPoint &point)
             cell_passed.clear();
             this->grid_->intersec_ray(r,tri_inter,pts,cell_passed);
             hasIntersection = true;
+            Rayon tmp(pts,lumiere-pts);
+
+            orig_light = qglviewer::Vec(pts.x,pts.y,pts.z);
+            dir_light = qglviewer::Vec(lumiere.x-pts.x,lumiere.y-pts.y,lumiere.z-pts.z);
+            pts = Vec3(0,0,0);
+            if(this->grid_->intersec_ray(tmp,tri_inter,pts,tri_inter.index))
+                std::cout << "ombre" << std::endl;
             break;
         }else {
             hasIntersection = false;

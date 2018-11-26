@@ -23,6 +23,8 @@ public:
     double get_ymin()const{return _ymin;}
     double get_zmin()const{return _zmin;}
     Vec3 get_min()const{return Vec3(_xmin,_ymin,_zmin);}
+    void move_min(Vec3 v){_xmin+=v.x;_ymin+=v.y;_zmin+=v.z;}
+    void move_max(Vec3 v){_xmax+=v.x;_ymax+=v.y;_zmax+=v.z;}
 
     double get_xmax()const{return _xmax;}
     double get_ymax()const{return _ymax;}

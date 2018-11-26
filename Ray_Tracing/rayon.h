@@ -11,7 +11,7 @@ protected:
     Vec3 direction;
     Rayon();
 public:
-    Rayon(Vec3 o,Vec3 d):origine(o),direction(d){}
+    Rayon(Vec3 o,Vec3 d):origine(o),direction(glm::normalize(d)){}
     Rayon(const Rayon& r):origine(r.get_origine()),direction(r.get_direction()){}
 
     bool intersecTri(const Triangle t, Vec3 &inter)const;

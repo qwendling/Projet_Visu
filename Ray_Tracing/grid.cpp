@@ -16,6 +16,8 @@ Grid::Grid(List_triangle &list,unsigned def){
     step_z = Vec3(0,0,(max.z-min.z)/(double)def);
     Vec3 step_global = step_x+step_y+step_z;
 
+    aabb_list.move_max((step_global/10.0f));
+    aabb_list.move_min(-(step_global/10.0f));
     max = max + (step_global/10.0f);
     min = min - (step_global/10.0f);
 
@@ -58,7 +60,7 @@ Grid::Grid(List_triangle &list,unsigned def){
     this->aabb = aabb_list;
 }
 
-bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
+bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tri){
     Vec3 cube;
     Vec3 pos;
     Triangle tr;
@@ -74,6 +76,7 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
             //std::cout << "dehors " << std::endl;
             return false;
         }
+
     }
 
     Vec3 tMax;
@@ -110,49 +113,88 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
 
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
-    double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/N;
-    double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/N;
-    double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/N;
-
+    double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
+    double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
+    double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
+#if 1
     if (rayDir.x < 0)
     {
         step.x = -1;
-        tDelta.x = - voxellSizeX / r.get_direction().x;
+        tDelta.x = (-voxellSizeX) / rayDir.x;
         tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
     else
     {
         step.x = 1;
-        tDelta.x = voxellSizeX / r.get_direction().x;
-        tMax.x = (floor(rayOrigGrid.x / voxellSizeX +1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+        tDelta.x = voxellSizeX / rayDir.x;
+        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
     if (rayDir.y < 0)
     {
         step.y = -1;
-        tDelta.y = - voxellSizeY / r.get_direction().y;
+        tDelta.y = (-voxellSizeY) / rayDir.y;
         tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
     else
     {
         step.y = 1;
-        tDelta.y = voxellSizeY / r.get_direction().y;
-        tMax.y = (floor(rayOrigGrid.y / voxellSizeY +1) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+        tDelta.y = voxellSizeY / rayDir.y;
+        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
 
     if (rayDir.z < 0)
     {
         step.z = -1;
-        tDelta.z = - voxellSizeZ / r.get_direction().z;
+        tDelta.z = (-voxellSizeZ) / rayDir.z;
         tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
     else
     {
         step.z = 1;
-        tDelta.z = voxellSizeZ / r.get_direction().z;
-        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ +1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+        tDelta.z = voxellSizeZ / rayDir.z;
+        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+#else
+    if (rayDir.x < 0)
+    {
+        step.x = -1;
+        tDelta.x = (-voxellSizeX) / rayDir.x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+    }
+    else
+    {
+        step.x = 1;
+        tDelta.x = voxellSizeX / rayDir.x;
+        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
+    if (rayDir.y < 0)
+    {
+        step.y = -1;
+        tDelta.y = (-voxellSizeY) / rayDir.y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+    else
+    {
+        step.y = 1;
+        tDelta.y = voxellSizeY / rayDir.y;
+        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+
+    if (rayDir.z < 0)
+    {
+        step.z = -1;
+        tDelta.z = (-voxellSizeZ) / rayDir.z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+    else
+    {
+        step.z = 1;
+        tDelta.z = voxellSizeZ / rayDir.z;
+        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+#endif
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
 
@@ -167,11 +209,11 @@ bool Grid::intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){
             //std::cout << "rien trouver " << std::endl;
             return has_intersect;
         }
-       if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter))
+       if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter)&& tmp_triangle.index != id_skip_tri)
        {
            //std::cout << "inter find" << std::endl;
           double dist_tmp = glm::distance(r.get_origine(),tmp_inter);
-          if(dist_tmp < distance){
+          if(dist_tmp < distance ){
               inter = tmp_inter;
               distance = dist_tmp;
               t = tmp_triangle;
@@ -227,6 +269,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
             //std::cout << "dehors " << std::endl;
             return false;
         }
+
     }
 
     Vec3 tMax;
@@ -263,49 +306,88 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
 
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
-    double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/N;
-    double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/N;
-    double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/N;
-
+    double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
+    double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
+    double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
+#if 1
     if (rayDir.x < 0)
     {
         step.x = -1;
-        tDelta.x = - voxellSizeX / r.get_direction().x;
+        tDelta.x = (-voxellSizeX) / rayDir.x;
         tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
     else
     {
         step.x = 1;
-        tDelta.x = voxellSizeX / r.get_direction().x;
-        tMax.x = (floor(rayOrigGrid.x / voxellSizeX +1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+        tDelta.x = voxellSizeX / rayDir.x;
+        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
     if (rayDir.y < 0)
     {
         step.y = -1;
-        tDelta.y = - voxellSizeY / r.get_direction().y;
+        tDelta.y = (-voxellSizeY) / rayDir.y;
         tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
     else
     {
         step.y = 1;
-        tDelta.y = voxellSizeY / r.get_direction().y;
-        tMax.y = (floor(rayOrigGrid.y / voxellSizeY +1) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+        tDelta.y = voxellSizeY / rayDir.y;
+        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
 
     if (rayDir.z < 0)
     {
         step.z = -1;
-        tDelta.z = - voxellSizeZ / r.get_direction().z;
+        tDelta.z = (-voxellSizeZ) / rayDir.z;
         tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
     else
     {
         step.z = 1;
-        tDelta.z = voxellSizeZ / r.get_direction().z;
-        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ +1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+        tDelta.z = voxellSizeZ / rayDir.z;
+        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+#else
+    if (rayDir.x < 0)
+    {
+        step.x = -1;
+        tDelta.x = (-voxellSizeX) / rayDir.x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+    }
+    else
+    {
+        step.x = 1;
+        tDelta.x = voxellSizeX / rayDir.x;
+        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
+    if (rayDir.y < 0)
+    {
+        step.y = -1;
+        tDelta.y = (-voxellSizeY) / rayDir.y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+    else
+    {
+        step.y = 1;
+        tDelta.y = voxellSizeY / rayDir.y;
+        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+    }
+
+    if (rayDir.z < 0)
+    {
+        step.z = -1;
+        tDelta.z = (-voxellSizeZ) / rayDir.z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+    else
+    {
+        step.z = 1;
+        tDelta.z = voxellSizeZ / rayDir.z;
+        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+    }
+#endif
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
 
@@ -325,7 +407,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
        {
            //std::cout << "inter find" << std::endl;
           double dist_tmp = glm::distance(r.get_origine(),tmp_inter);
-          if(dist_tmp < distance){
+          if(dist_tmp < distance ){
               inter = tmp_inter;
               distance = dist_tmp;
               t = tmp_triangle;

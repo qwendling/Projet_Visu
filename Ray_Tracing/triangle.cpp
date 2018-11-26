@@ -17,6 +17,8 @@ std::ostream &operator<<(std::ostream &out,const Triangle& t){
     return out;
 }
 
+int Triangle::nb_tri = 0;
+
 Triangle::Triangle(Vec3 s1, Vec3 s2, Vec3 s3)
 {
     this->s_1 = s1;
@@ -24,6 +26,7 @@ Triangle::Triangle(Vec3 s1, Vec3 s2, Vec3 s3)
     this->s_3 = s3;
 
     this->normal = computeNormal();
+    this->index = Triangle::nb_tri++;
 }
 
 Triangle::Triangle(){
@@ -36,7 +39,7 @@ Vec3 Triangle::computeNormal() const{
 
     Vec3 normal = vec_cross(v12,v13);
 
-    return normal / normal.length();
+    return glm::normalize(normal);
 }
 
 bool Triangle::is_points_in_triangle(const Vec3& P) const

@@ -21,8 +21,10 @@ public:
     qglviewer::Camera& camera;
     Grid& grille;
     QColor Background_color;
+    std::vector<Vec3> liste_lumiere;
 
     void compute_phong();
+    void add_lumiere(Vec3 l){liste_lumiere.push_back(l);}
 signals:
     void update_draw();
 };

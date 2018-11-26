@@ -12,6 +12,8 @@ protected:
 
 
 public:
+    static int nb_tri;
+    int index;
     Vec3 normal;
     Vec3 s_1;
     Vec3 s_2;
