@@ -113,6 +113,9 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
 
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
+    rayOrigGrid.x = fabs(rayOrigGrid.x);
+    rayOrigGrid.y = fabs(rayOrigGrid.y);
+    rayOrigGrid.z = fabs(rayOrigGrid.z);
     double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
@@ -127,7 +130,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     {
         step.x = 1;
         tDelta.x = voxellSizeX / rayDir.x;
-        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX + 1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
     if (rayDir.y < 0)
@@ -140,7 +143,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     {
         step.y = 1;
         tDelta.y = voxellSizeY / rayDir.y;
-        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY + 1) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
 
     if (rayDir.z < 0)
@@ -153,7 +156,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     {
         step.z = 1;
         tDelta.z = voxellSizeZ / rayDir.z;
-        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ + 1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
 #else
     if (rayDir.x < 0)
@@ -306,6 +309,11 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
 
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
+
+    rayOrigGrid.x = fabs(rayOrigGrid.x);
+    rayOrigGrid.y = fabs(rayOrigGrid.y);
+    rayOrigGrid.z = fabs(rayOrigGrid.z);
+
     double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
@@ -320,7 +328,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     {
         step.x = 1;
         tDelta.x = voxellSizeX / rayDir.x;
-        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
+        tMax.x = (floor(rayOrigGrid.x / voxellSizeX +1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
     if (rayDir.y < 0)
@@ -333,7 +341,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     {
         step.y = 1;
         tDelta.y = voxellSizeY / rayDir.y;
-        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+        tMax.y = (floor(rayOrigGrid.y / voxellSizeY + 1) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
 
     if (rayDir.z < 0)
@@ -346,7 +354,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     {
         step.z = 1;
         tDelta.z = voxellSizeZ / rayDir.z;
-        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
+        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ + 1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
 #else
     if (rayDir.x < 0)
@@ -372,7 +380,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     {
         step.y = 1;
         tDelta.y = voxellSizeY / rayDir.y;
-        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
+        tMax.y = (ceil(rayOrigGrid.y1 / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
     }
 
     if (rayDir.z < 0)
@@ -402,6 +410,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
             //std::cout << "rien trouver " << std::endl;
             return has_intersect;
         }
+        liste_cell[cube.x][cube.y][cube.z].draw();
         cell_passed.push_back(liste_cell[cube.x][cube.y][cube.z]);
        if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter))
        {
