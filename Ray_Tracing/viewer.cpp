@@ -19,7 +19,7 @@ Viewer::Viewer():
 	GRIS(0.5,0.5,0.5),
     NOIR(0,0,0),
     isRendu(false),
-    lumiere(-27,3.3,0.24)
+    lumiere(-0.087,3.02,-0.08085)
 {
     _Loader = new AssetLoader();
 
@@ -409,12 +409,12 @@ void Viewer::postSelection(const QPoint &point)
         if(r.intersecListeTri(list,tri_inter,pts)){
             pts = Vec3();
             cell_passed.clear();
-            this->grid_->intersec_ray(r,tri_inter,pts,cell_passed);
+            this->grid_->intersec_ray(r,tri_inter,pts,cell_passed,-1);
             hasIntersection = true;
-            Rayon tmp(pts,lumiere-pts);
+            Rayon tmp(lumiere,pts-lumiere);
 
-            orig_light = qglviewer::Vec(pts.x,pts.y,pts.z);
-            dir_light = qglviewer::Vec(lumiere.x-pts.x,lumiere.y-pts.y,lumiere.z-pts.z);
+            orig_light = qglviewer::Vec(lumiere.x,lumiere.y,lumiere.z);
+            dir_light = qglviewer::Vec(tmp.get_direction().x,tmp.get_direction().y,tmp.get_direction().z);
             pts = Vec3(0,0,0);
             if(this->grid_->intersec_ray(tmp,tri_inter,pts,tri_inter.index))
                 std::cout << "ombre" << std::endl;

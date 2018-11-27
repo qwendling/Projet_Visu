@@ -171,7 +171,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
             //std::cout << "rien trouver " << std::endl;
             return has_intersect;
         }
-       if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter)&& tmp_triangle.index != id_skip_tri)
+       if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter))
        {
            //std::cout << "inter find" << std::endl;
           double dist_tmp = glm::distance(r.get_origine(),tmp_inter);
@@ -179,9 +179,10 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
               inter = tmp_inter;
               distance = dist_tmp;
               t = tmp_triangle;
+              has_intersect = tmp_triangle.index != id_skip_tri;
           }
 
-          has_intersect = true;
+
        }
        if (tMax.x < tMax.y)
        {
@@ -215,7 +216,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     }
 }
 
-bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Cell> &cell_passed){
+bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Cell> &cell_passed,int id_skip_tri){
     Vec3 cube;
     Vec3 pos;
     Triangle tr;
@@ -289,7 +290,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
         tMax.x = (floor(rayOrigGrid.x / voxellSizeX +1) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
     }
 
-    if (rayDir.y < 0)
+    if (rayDir.y< 0)
     {
         step.y = -1;
         tDelta.y = (-voxellSizeY) / rayDir.y;
@@ -339,9 +340,9 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
               inter = tmp_inter;
               distance = dist_tmp;
               t = tmp_triangle;
+              if(tmp_triangle.index != id_skip_tri)
+                has_intersect = true;
           }
-
-          has_intersect = true;
        }
        if (tMax.x < tMax.y)
        {

@@ -20,7 +20,7 @@ void Ray_phong::compute_phong(){
             if(grille.intersec_ray(r,t_inter,inter)){
                 Image[i][j] = Vec3(0,0,0);
                 for(auto& l:liste_lumiere){
-                    Rayon r_light(inter,l-inter);
+                    Rayon r_light(l,inter-l);
                     Triangle tmp_tri;
                     Vec3 tmp_inter;
                     if(!grille.intersec_ray(r_light,tmp_tri,tmp_inter,t_inter.index)){
