@@ -27,18 +27,18 @@ Grid::Grid(List_triangle &list,unsigned def){
     step_global = step_x+step_y+step_z;
 
     liste_cell.resize(def);
-    for(int i=0;i<def;i++){
+    for(unsigned i=0;i<def;i++){
         liste_cell[i].resize(def);
-        for(int j=0;j<def;j++){
+        for(unsigned j=0;j<def;j++){
             liste_cell[i][j].resize(def);
         }
     }
 
     Vec3 xmin = min;
-    for(int x=0;x<def;xmin+=step_x,x++){
-        int y=0;
+    for(unsigned x=0;x<def;xmin+=step_x,x++){
+        unsigned y=0;
         for(Vec3 ymin = xmin;y<def;ymin+=step_y,y++){
-            int z=0;
+            unsigned z=0;
             for(Vec3 zmin = ymin;z<def;zmin+=step_z,z++){
                 Vec3 zmax = zmin+step_global;
                 this->liste_cell[x][y][z] = Cell(zmin,zmax);
@@ -47,9 +47,9 @@ Grid::Grid(List_triangle &list,unsigned def){
     }
     std::for_each(list.begin(),list.end(),[&](Triangle& t){
         debug_list.push_back(t);
-        for(int i=0;i<def;i++){
-            for(int j=0;j<def;j++){
-                for(int k=0;k<def;k++){
+        for(unsigned i=0;i<def;i++){
+            for(unsigned j=0;j<def;j++){
+                for(unsigned k=0;k<def;k++){
                     if(this->liste_cell[i][j][k].insertect_tri(t)){
                         liste_cell[i][j][k].t_list.push_back(t);
                     }
@@ -119,7 +119,6 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
-#if 1
     if (rayDir.x < 0)
     {
         step.x = -1;
@@ -158,46 +157,6 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
         tDelta.z = voxellSizeZ / rayDir.z;
         tMax.z = (floor(rayOrigGrid.z / voxellSizeZ + 1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
-#else
-    if (rayDir.x < 0)
-    {
-        step.x = -1;
-        tDelta.x = (-voxellSizeX) / rayDir.x;
-        tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
-    }
-    else
-    {
-        step.x = 1;
-        tDelta.x = voxellSizeX / rayDir.x;
-        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
-    }
-
-    if (rayDir.y < 0)
-    {
-        step.y = -1;
-        tDelta.y = (-voxellSizeY) / rayDir.y;
-        tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
-    }
-    else
-    {
-        step.y = 1;
-        tDelta.y = voxellSizeY / rayDir.y;
-        tMax.y = (ceil(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
-    }
-
-    if (rayDir.z < 0)
-    {
-        step.z = -1;
-        tDelta.z = (-voxellSizeZ) / rayDir.z;
-        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
-    }
-    else
-    {
-        step.z = 1;
-        tDelta.z = voxellSizeZ / rayDir.z;
-        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
-    }
-#endif
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
 
@@ -317,7 +276,6 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
-#if 1
     if (rayDir.x < 0)
     {
         step.x = -1;
@@ -356,46 +314,7 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
         tDelta.z = voxellSizeZ / rayDir.z;
         tMax.z = (floor(rayOrigGrid.z / voxellSizeZ + 1) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
     }
-#else
-    if (rayDir.x < 0)
-    {
-        step.x = -1;
-        tDelta.x = (-voxellSizeX) / rayDir.x;
-        tMax.x = (floor(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
-    }
-    else
-    {
-        step.x = 1;
-        tDelta.x = voxellSizeX / rayDir.x;
-        tMax.x = (ceil(rayOrigGrid.x / voxellSizeX) * voxellSizeX - rayOrigGrid.x) / rayDir.x;
-    }
 
-    if (rayDir.y < 0)
-    {
-        step.y = -1;
-        tDelta.y = (-voxellSizeY) / rayDir.y;
-        tMax.y = (floor(rayOrigGrid.y / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
-    }
-    else
-    {
-        step.y = 1;
-        tDelta.y = voxellSizeY / rayDir.y;
-        tMax.y = (ceil(rayOrigGrid.y1 / voxellSizeY) * voxellSizeY - rayOrigGrid.y) / rayDir.y;
-    }
-
-    if (rayDir.z < 0)
-    {
-        step.z = -1;
-        tDelta.z = (-voxellSizeZ) / rayDir.z;
-        tMax.z = (floor(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
-    }
-    else
-    {
-        step.z = 1;
-        tDelta.z = voxellSizeZ / rayDir.z;
-        tMax.z = (ceil(rayOrigGrid.z / voxellSizeZ) * voxellSizeZ - rayOrigGrid.z) / rayDir.z;
-    }
-#endif
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
 

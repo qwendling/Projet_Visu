@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 #include <iomanip>
 #include <GL/glut.h>
+#include <algorithm>
 #define RESOLUTION_GRID 20
 
 Viewer::Viewer():
@@ -182,6 +183,14 @@ void Viewer::initPainter(){
     painter.end();
 }
 
+void clamp(double& v,double low,double hi){
+    assert(low<=hi);
+    if(v<low)
+        v = low;
+    if(v>hi)
+        v = hi;
+}
+
 void Viewer::drawOverpaint(QPainter *painter) {
 
     if(!isRendu){
@@ -207,6 +216,19 @@ void Viewer::drawOverpaint(QPainter *painter) {
             painter->setPen(pen);
             painter->drawPoint(i,j);
         }*/
+          double tmp;
+          tmp = Image[i+W/2][j+H/2].x;
+          clamp(tmp,0,255);
+          Image[i+W/2][j+H/2].x = tmp;
+
+          tmp = Image[i+W/2][j+H/2].y;
+          clamp(tmp,0,255);
+          Image[i+W/2][j+H/2].y = tmp;
+
+          tmp = Image[i+W/2][j+H/2].z;
+          clamp(tmp,0,255);
+          Image[i+W/2][j+H/2].z = tmp;
+
           pen.setColor(QColor(Image[i+W/2][j+H/2].x,Image[i+W/2][j+H/2].y,Image[i+W/2][j+H/2].z));
           painter->setPen(pen);
           painter->drawPoint(i,j);
