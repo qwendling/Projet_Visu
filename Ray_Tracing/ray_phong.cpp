@@ -29,8 +29,9 @@ void Ray_phong::compute_phong(){
                         Vec3 N = t_inter.computeNormal();
                         Vec3 L = glm::normalize(l-inter);
                         float cos_theta = glm::dot(L,N);
+                         Vec3 R = glm::reflect(-L,N);
 
-                        Vec3 R = glm::normalize(2*cos_theta*N-L);
+                        //Vec3 R = glm::normalize(2*cos_theta*N-L);
 
                         Vec3 color_diff = Kd_normalize*cos_theta;
 

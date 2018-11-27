@@ -19,7 +19,7 @@ Viewer::Viewer():
 	GRIS(0.5,0.5,0.5),
     NOIR(0,0,0),
     isRendu(false),
-    lumiere(-0.087,3.02,-0.08085)
+    lumiere(-0.702039,3.9392,1.51081)
 {
     _Loader = new AssetLoader();
 
@@ -310,6 +310,7 @@ void Viewer::keyPressEvent(QKeyEvent *e)
                rayTracing();
         break;
     case  Qt::Key_P:
+        lumiere = Vec3(camera()->position().x,camera()->position().y,camera()->position().z);
         std::cout << "pos camera : " << camera()->position() << std::endl;
         break;
 		default:
