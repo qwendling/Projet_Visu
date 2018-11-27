@@ -34,6 +34,10 @@ void Ray_phong::compute_phong(){
 
                         Vec3 color_diff = Kd_normalize*cos_theta;
 
+                        //Bon ca marche mais pas ouf #scotch
+                        if(t_inter.Ns < 1)
+                            t_inter.Ns = 1;
+
                         Vec3 Ks_normalise = Vec3(255*t_inter.Ks.r,255*t_inter.Ks.g,255*t_inter.Ks.b)/(float)(t_inter.Ns+2);
                         Vec3 color_spec = Ks_normalise*(float)pow(glm::dot(R,glm::normalize(-r.get_direction())),t_inter.Ns);
 

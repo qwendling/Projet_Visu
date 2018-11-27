@@ -113,9 +113,12 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
 
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
+
+    // #scotch
     rayOrigGrid.x = fabs(rayOrigGrid.x);
     rayOrigGrid.y = fabs(rayOrigGrid.y);
     rayOrigGrid.z = fabs(rayOrigGrid.z);
+
     double voxellSizeX = (aabb.get_xmax()-aabb.get_xmin())/(double)N;
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
