@@ -46,7 +46,8 @@ SOURCES += main.cpp \
     source_facette.cpp \
     grid.cpp \
     cell.cpp \
-    ray_phong.cpp
+    ray_phong.cpp \
+    ray_stochastique.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -58,6 +59,7 @@ HEADERS  += viewer.h \
     list_triangle.h \
     grid.h \
     cell.h \
-    ray_phong.h
+    ray_phong.h \
+    ray_stochastique.h
 
 

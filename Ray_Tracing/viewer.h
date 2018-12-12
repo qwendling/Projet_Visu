@@ -16,6 +16,7 @@
 #include "triangle.h"
 #include "grid.h"
 #include "ray_phong.h"
+#include "ray_stochastique.h"
 
 /**
  * @brief The Viewer class
@@ -83,6 +84,7 @@ protected:
 	Mat4 getCurrentProjectionMatrix() const;
 
     Ray_phong* rp;
+    Ray_stochastique* rs;
     std::vector<std::vector<Vec3>> Image;
 
     /// 0:flat 1:phong
@@ -107,6 +109,7 @@ protected:
     AssetLoader* _Loader;
     Grid* grid_;
     std::vector<Cell> cell_passed;
+    MeshTri facette_lumiere;
 private slots:
     void initPainter();
 

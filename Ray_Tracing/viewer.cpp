@@ -71,7 +71,9 @@ void Viewer::loadMesh(const std::string filename){
 
 void Viewer::init()
 {
+
 	makeCurrent();
+
 	glewExperimental = GL_TRUE;
 	int glewErr = glewInit();
 	if( glewErr != GLEW_OK )
@@ -284,10 +286,15 @@ void Viewer::rayTracing(){
         }
     }
 
-    rp = new Ray_phong(Image,*camera(),*grid_,bck);
+    /*rp = new Ray_phong(Image,*camera(),*grid_,bck);
     rp->add_lumiere(this->lumiere);
     connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
     rp->compute_phong();
+    initPainter();*/
+    rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
+    rs->add_lumiere(this->lumiere);
+    connect(rs,SIGNAL(update_draw()),SLOT(initPainter()));
+    rs->compute();
     initPainter();
     std::cout << "fin ray trace" << std::endl;
 }

@@ -3,12 +3,14 @@
 void Ray_phong::compute_phong(){
     qglviewer::Vec orig;
     qglviewer::Vec dir;
-    QPoint point;
+    //QPoint point;
     for(unsigned i=0;i<Image.size();i++){
         for(unsigned j=0;j<Image[i].size();j++){
-            point.setX(i);
+            /*point.setX(i);
             point.setY(j);
-            camera.convertClickToLine(point, orig, dir);
+            camera.convertClickToLine(point, orig, dir);*/
+            orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,-1));
+            dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,1));
 
             Vec3 o (orig[0],orig[1],orig[2]);
             Vec3 d (dir[0],dir[1],dir[2]);

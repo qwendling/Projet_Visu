@@ -266,15 +266,6 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     double voxellSizeY = (aabb.get_ymax()-aabb.get_ymin())/(double)N;
     double voxellSizeZ = (aabb.get_zmax()-aabb.get_zmin())/(double)N;
 
-    if(cube.x == N){
-        cube.x -=1;
-    }
-    if(cube.y == N){
-        cube.y -=1;
-    }
-    if(cube.z == N){
-        cube.z -=1;
-    }
 
 
 
@@ -323,6 +314,18 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
 
     //Second part of 3DDDA Algorithm starts here: let the ray move on until it hits a filled cube
 
+    if(cube.x == N){
+        tMax.x += tDelta.x;
+        cube.x -=1;
+    }
+    if(cube.y == N){
+        tMax.y += tDelta.y;
+        cube.y -=1;
+    }
+    if(cube.z == N){
+        tMax.z += tDelta.z;
+        cube.z -=1;
+    }
 
 
     bool has_intersect = false;
