@@ -19,7 +19,8 @@ Viewer::Viewer():
 	GRIS(0.5,0.5,0.5),
     NOIR(0,0,0),
     isRendu(false),
-    lumiere(-0.702039,3.9392,1.51081)
+    lumiere(-0.702039,3.9392,1.51081),
+    id_active_facette(0)
 {
     _Loader = new AssetLoader();
 
@@ -71,6 +72,19 @@ void Viewer::loadMesh(const std::string filename){
 
 void Viewer::init()
 {
+
+    Triangle t(Vec3(0,0,0),Vec3(1,0,0),Vec3(0,0,1));
+    source_facette sf(t);
+    this->liste_facettes.push_back(sf);
+
+    /*t = Triangle(Vec3(1,0,1),Vec3(0,0,1),Vec3(1,0,0));
+    sf = source_facette(t);
+    this->liste_facettes.push_back(sf);*/
+
+    setMouseBinding(Qt::ShiftModifier, Qt::RightButton, QGLViewer::FRAME,
+                    QGLViewer::TRANSLATE);
+    setManipulatedFrame(new qglviewer::ManipulatedFrame());
+
 
 	makeCurrent();
 
@@ -150,36 +164,6 @@ void Viewer::initPainter(){
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    // Save current OpenGL state
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-
-    // Reset OpenGL parameters
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_MULTISAMPLE);
-    static GLfloat lightPosition[4] = {1.0, 5.0, 5.0, 1.0};
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-    glClearColor(backgroundColor().redF(), backgroundColor().greenF(),
-                 backgroundColor().blueF(), backgroundColor().alphaF());
-
-    // Classical 3D drawing, usually performed by paintGL().
-    preDraw();
-    draw();
-    postDraw();
-    // Restore OpenGL state
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-
     drawOverpaint(&painter);
 
     painter.end();
@@ -198,7 +182,6 @@ void Viewer::drawOverpaint(QPainter *painter) {
     if(!isRendu){
         return;
     }
-
   painter->save();
   painter->translate(width() / 2, height() / 2);
   QPen pen;
@@ -244,6 +227,8 @@ void Viewer::drawOverpaint(QPainter *painter) {
 void Viewer::draw()
 {
 	makeCurrent();
+    Vec3 pos_frame(manipulatedFrame()->position().x,manipulatedFrame()->position().y,manipulatedFrame()->position().z);
+    liste_facettes[id_active_facette].move_facette(pos_frame);
 
     for(unsigned i=0;i<t_mesh.size();i++){
         t_mesh[i].set_matrices(getCurrentModelViewMatrix(),getCurrentProjectionMatrix());
@@ -275,6 +260,13 @@ void Viewer::draw()
    for(auto& c:cell_passed)
        c.draw();
 
+   for(unsigned i=0;i<liste_facettes.size();i++){
+       if(i!=id_active_facette){
+           liste_facettes[i].draw(1,1,1);
+       }else{
+           liste_facettes[i].draw(0,1,0);
+       }
+   }
 }
 
 void Viewer::rayTracing(){
@@ -293,6 +285,8 @@ void Viewer::rayTracing(){
     initPainter();*/
     rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
     rs->add_lumiere(this->lumiere);
+    for(auto& sf:liste_facettes)
+        rs->add_facette(sf);
     connect(rs,SIGNAL(update_draw()),SLOT(initPainter()));
     rs->compute();
     initPainter();
@@ -302,6 +296,7 @@ void Viewer::rayTracing(){
 
 void Viewer::keyPressEvent(QKeyEvent *e)
 {
+    Vec3 cm ;
 	switch(e->key())
 	{
 		case Qt::Key_Escape:
@@ -316,6 +311,12 @@ void Viewer::keyPressEvent(QKeyEvent *e)
                isRendu = true;
                rayTracing();
         break;
+        case Qt::Key_Tab:
+            id_active_facette = (id_active_facette+1)%liste_facettes.size();
+            cm = liste_facettes[id_active_facette].get_cm();
+            manipulatedFrame()->setPosition(cm.x,cm.y,cm.z);
+        break;
+
     case  Qt::Key_P:
         lumiere = Vec3(camera()->position().x,camera()->position().y,camera()->position().z);
         std::cout << "pos camera : " << camera()->position() << std::endl;

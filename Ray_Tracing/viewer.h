@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <QGLViewer/qglviewer.h>
+#include <QGLViewer/manipulatedFrame.h>
 #include <OGLRender/shaderprogramcolor.h>
 
 #include <matrices.h>
@@ -17,6 +18,7 @@
 #include "grid.h"
 #include "ray_phong.h"
 #include "ray_stochastique.h"
+#include "source_facette.h"
 
 /**
  * @brief The Viewer class
@@ -110,6 +112,8 @@ protected:
     Grid* grid_;
     std::vector<Cell> cell_passed;
     MeshTri facette_lumiere;
+    std::vector<source_facette> liste_facettes;
+    int id_active_facette;
 private slots:
     void initPainter();
 
