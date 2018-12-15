@@ -118,7 +118,7 @@ void Viewer::init()
 
 
 void Viewer::paintEvent(QPaintEvent *event) {
-
+    std::cout << "hum" <<std::endl;
   Q_UNUSED(event)
   QPainter painter;
   painter.begin(this);
@@ -154,7 +154,7 @@ void Viewer::paintEvent(QPaintEvent *event) {
   glPopMatrix();
   glPopAttrib();
 
-  //drawOverpaint(&painter);
+  drawOverpaint(&painter);
 
   painter.end();
 }
@@ -178,7 +178,6 @@ void clamp(double& v,double low,double hi){
 }
 
 void Viewer::drawOverpaint(QPainter *painter) {
-
     if(!isRendu){
         return;
     }
@@ -226,6 +225,7 @@ void Viewer::drawOverpaint(QPainter *painter) {
 
 void Viewer::draw()
 {
+
 	makeCurrent();
     Vec3 pos_frame(manipulatedFrame()->position().x,manipulatedFrame()->position().y,manipulatedFrame()->position().z);
     liste_facettes[id_active_facette].move_facette(pos_frame);
@@ -274,7 +274,7 @@ void Viewer::rayTracing(){
     for(auto& i:Image){
         i.resize(this->height());
         for(auto& v:i){
-            v = Vec3(0,0,0);
+            v = Vec3(1,0,1);
         }
     }
 
@@ -291,6 +291,7 @@ void Viewer::rayTracing(){
     rs->compute();
     initPainter();
     std::cout << "fin ray trace" << std::endl;
+
 }
 
 

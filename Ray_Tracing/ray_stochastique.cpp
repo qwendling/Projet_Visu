@@ -5,7 +5,7 @@
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 #define RAY_PIXELS 3
-#define PAS_COMPUTE 20
+#define PAS_COMPUTE 10
 
 std::vector<Vec3> random_pixels(int i,int j){
     std::srand(std::time(nullptr));
@@ -26,6 +26,7 @@ void Ray_stochastique::compute()
     int debut = 0;
     int fin;
     std::vector<QFuture<void>> liste_threads;
+
     auto aux = [&](int debut,int fin){
         qglviewer::Vec orig;
         qglviewer::Vec dir;
@@ -35,11 +36,12 @@ void Ray_stochastique::compute()
                 std::vector<Vec3> liste_pixel_random = random_pixels(i,j);
 
                 for(unsigned n = 0;n<liste_pixel_random.size();n++){
-                        orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,-1));
+                        orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,0));
                         dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,1));
 
                         Vec3 o (orig[0],orig[1],orig[2]);
                         Vec3 d (dir[0],dir[1],dir[2]);
+                        d=d-o;
 
                         Rayon r (o,d);
 
@@ -85,7 +87,6 @@ void Ray_stochastique::compute()
                 Image[i][j] /= RAY_PIXELS*RAY_PIXELS;
             }
         }
-        //emit update_draw();
     };
     while(need_thread){
         if(debut + PAS_COMPUTE >= Image.size()){
@@ -101,8 +102,12 @@ void Ray_stochastique::compute()
     }
 
     for(auto& t:liste_threads){
-        t.waitForFinished();
-        emit update_draw();
+        if(t.isRunning()){
+            t.waitForFinished();
+            emit update_draw();
+        }
+
+
     }
 
 #else

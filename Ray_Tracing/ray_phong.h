@@ -27,6 +27,8 @@ public:
     void add_lumiere(Vec3 l){liste_lumiere.push_back(l);}
 signals:
     void update_draw();
+protected slots:
+    void slot_emit_update(){emit update_draw();std::cout << "ok" << std::endl;}
 };
 
 #endif // RAY_PHONG_H
