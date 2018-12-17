@@ -7,42 +7,50 @@
 #include <QThread>
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
-#define RAY_PIXELS 3
+#define RAY_PIXELS 4
 #define PAS_COMPUTE 10
 
 std::vector<Vec3> random_pixels(int i,int j){
     std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(0.0,1.0);
+    std::uniform_real_distribution<float> distribution(0.0,1.0/(double)RAY_PIXELS);
 
     std::vector<Vec3> result;
-    for(int n=0;n<RAY_PIXELS*RAY_PIXELS;n++){
-        Vec3 tmp(i,j,0);
-        tmp.x += distribution(generator);
-        tmp.y += distribution(generator);
-        result.push_back(tmp);
+
+    double i_jittering=i;
+    double j_jittering=j;
+    for(int n=0;n<RAY_PIXELS;n++){
+        for(int n2=0;n2<RAY_PIXELS;n2++){
+            Vec3 tmp(i_jittering,j_jittering,0);
+            tmp.x += distribution(generator);
+            tmp.y += distribution(generator);
+            result.push_back(tmp);
+            j_jittering += 1.0/(double)RAY_PIXELS;
+        }
+        j_jittering = j;
+        i_jittering += 1.0/(double)RAY_PIXELS;
     }
     return result;
 }
 
 void Ray_stochastique::compute()
 {
-#if 1
+#if 0
     bool need_thread = true;
     int debut = 0;
     int fin;
     std::vector<QFuture<void>> liste_threads;
 
+    std::vector<Vec3> liste_pixel_random = random_pixels(0,0);
     auto aux = [&](int debut,int fin){
         qglviewer::Vec orig;
         qglviewer::Vec dir;
         for(unsigned i=debut;i<fin;i++){
             for(unsigned j=0;j<Image[i].size();j++){
                 Image[i][j] = Vec3(0,0,0);
-                std::vector<Vec3> liste_pixel_random = random_pixels(i,j);
 
                 for(unsigned n = 0;n<liste_pixel_random.size();n++){
-                        orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,0));
-                        dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,1));
+                        orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x+i,liste_pixel_random[n].y+j,0));
+                        dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x+i,liste_pixel_random[n].y+j,1));
 
                         Vec3 o (orig[0],orig[1],orig[2]);
                         Vec3 d (dir[0],dir[1],dir[2]);

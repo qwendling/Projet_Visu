@@ -24,8 +24,8 @@ public:
     Grid()=delete;
     Grid(List_triangle& list, unsigned def);
 
-    bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,int id_skip_tri);
-    bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter){return intersec_ray(r,t,inter,-1);}
+    bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,int id_skip_tri)const;
+    bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter)const{return intersec_ray(r,t,inter,-1);}
     //pour le debug
     bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,std::vector<Cell>& cell_passed,int id_skip_tri);
 };

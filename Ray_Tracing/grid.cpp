@@ -60,7 +60,7 @@ Grid::Grid(List_triangle &list,unsigned def){
     this->aabb = aabb_list;
 }
 
-bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tri){
+bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tri)const{
     Vec3 cube;
     Vec3 pos;
     Triangle tr;

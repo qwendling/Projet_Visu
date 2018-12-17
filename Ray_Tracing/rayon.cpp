@@ -47,11 +47,11 @@ double Rayon::dist(const Vec3& v)const{
     return (v-this->get_origine()).x/this->get_direction().x;
 }
 
-bool Rayon::intersecListeTri(List_triangle& liste,Triangle& t_inter,Vec3& p_inter)const{
+bool Rayon::intersecListeTri(const List_triangle &liste, Triangle& t_inter, Vec3& p_inter)const{
     bool result = false;
     std::vector<std::pair<Triangle,Vec3>> liste_inter;
     Vec3 tmp_inter;
-    std::for_each(liste.begin(),liste.end(),[&](Triangle& t){
+    std::for_each(liste.begin(),liste.end(),[&](const Triangle& t){
         if(this->intersecTri(t,tmp_inter)){
             if(this->dist(tmp_inter) > 0){
                 liste_inter.push_back(std::make_pair(t,tmp_inter));
