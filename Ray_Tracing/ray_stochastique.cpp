@@ -1,6 +1,9 @@
 #include "ray_stochastique.h"
 #include <cstdlib>
 #include <ctime>
+#include <random>
+#include <chrono>
+#include <thread>
 #include <QThread>
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
@@ -8,12 +11,14 @@
 #define PAS_COMPUTE 10
 
 std::vector<Vec3> random_pixels(int i,int j){
-    std::srand(std::time(nullptr));
+    std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(0.0,1.0);
+
     std::vector<Vec3> result;
     for(int n=0;n<RAY_PIXELS*RAY_PIXELS;n++){
         Vec3 tmp(i,j,0);
-        tmp.x += rand()/(float)RAND_MAX;
-        tmp.y += rand()/(float)RAND_MAX;
+        tmp.x += distribution(generator);
+        tmp.y += distribution(generator);
         result.push_back(tmp);
     }
     return result;
@@ -101,14 +106,20 @@ void Ray_stochastique::compute()
         liste_threads.push_back(t);
     }
 
-    for(auto& t:liste_threads){
-        if(t.isRunning()){
-            t.waitForFinished();
-            emit update_draw();
+    int nb_threads = liste_threads.size();
+    int nb_threads_ended = 0;
+    while(nb_threads_ended != nb_threads){
+        nb_threads_ended = 0;
+        for(auto& t:liste_threads){
+            if(t.isFinished()){
+                nb_threads_ended++;
+
+            }
         }
-
-
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        emit update_draw();
     }
+
 
 #else
     qglviewer::Vec orig;
@@ -119,11 +130,12 @@ void Ray_stochastique::compute()
             std::vector<Vec3> liste_pixel_random = random_pixels(i,j);
 
             for(unsigned n = 0;n<liste_pixel_random.size();n++){
-                    orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,-1));
+                    orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,0));
                     dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(liste_pixel_random[n].x,liste_pixel_random[n].y,1));
 
                     Vec3 o (orig[0],orig[1],orig[2]);
                     Vec3 d (dir[0],dir[1],dir[2]);
+                    d=d-o;
 
                     Rayon r (o,d);
 

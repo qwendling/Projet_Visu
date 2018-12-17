@@ -46,7 +46,6 @@ void Viewer::loadMesh(const std::string filename){
             lt.push_back(v);
         }
     }
-    std::cout << "hum 2 " << std::endl;
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
     /*
     int i=0;
@@ -118,7 +117,6 @@ void Viewer::init()
 
 
 void Viewer::paintEvent(QPaintEvent *event) {
-    std::cout << "hum" <<std::endl;
   Q_UNUSED(event)
   QPainter painter;
   painter.begin(this);
