@@ -76,9 +76,9 @@ void Viewer::init()
     source_facette sf(t);
     this->liste_facettes.push_back(sf);
 
-    /*t = Triangle(Vec3(1,0,1),Vec3(0,0,1),Vec3(1,0,0));
+    t = Triangle(Vec3(1,0,1),Vec3(0,0,1),Vec3(1,0,0));
     sf = source_facette(t);
-    this->liste_facettes.push_back(sf);*/
+    this->liste_facettes.push_back(sf);
 
     setMouseBinding(Qt::ShiftModifier, Qt::RightButton, QGLViewer::FRAME,
                     QGLViewer::TRANSLATE);
@@ -169,10 +169,11 @@ void Viewer::initPainter(){
 
 void clamp(double& v,double low,double hi){
     assert(low<=hi);
-    if(v<low)
+    if((int)v<low)
         v = low;
-    if(v>hi)
+    if((int)v>hi)
         v = hi;
+    v=(int) v;
 }
 
 void Viewer::drawOverpaint(QPainter *painter) {

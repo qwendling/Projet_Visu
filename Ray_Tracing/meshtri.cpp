@@ -249,6 +249,10 @@ void MeshTri::set_DiffuseColor(aiMaterial* mat){
     mat->Get(AI_MATKEY_COLOR_AMBIENT,Ka);
     mat->Get(AI_MATKEY_COLOR_SPECULAR,Ks);
     mat->Get(AI_MATKEY_SHININESS,Ns);
+    if(AI_SUCCESS != aiGetMaterialFloat(mat,AI_MATKEY_SHININESS,&Ns)){
+        Ns = 24.0f;
+    }
+    Ns /= 100.f;
     //std::cout << Kd.r << " " << Kd.g << " " << Kd.b << std::endl;
 }
 

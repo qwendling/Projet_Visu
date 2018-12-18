@@ -47,7 +47,7 @@ class MeshTri
     aiColor3D Kd;
     aiColor3D Ks;
     aiColor3D Ka;
-    double Ns;
+    float Ns;
 
 public:
 	MeshTri();
