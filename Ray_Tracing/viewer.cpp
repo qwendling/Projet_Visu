@@ -199,20 +199,17 @@ void Viewer::drawOverpaint(QPainter *painter) {
             painter->setPen(pen);
             painter->drawPoint(i,j);
         }*/
-          double tmp;
-          tmp = Image[i+W/2][j+H/2].x;
-          clamp(tmp,0,255);
-          Image[i+W/2][j+H/2].x = tmp;
+          double tmp_x,tmp_y,tmp_z;
+          tmp_x = Image[i+W/2][j+H/2].x;
+          clamp(tmp_x,0,255);
 
-          tmp = Image[i+W/2][j+H/2].y;
-          clamp(tmp,0,255);
-          Image[i+W/2][j+H/2].y = tmp;
+          tmp_y = Image[i+W/2][j+H/2].y;
+          clamp(tmp_y,0,255);
 
-          tmp = Image[i+W/2][j+H/2].z;
-          clamp(tmp,0,255);
-          Image[i+W/2][j+H/2].z = tmp;
+          tmp_z = Image[i+W/2][j+H/2].z;
+          clamp(tmp_z,0,255);
 
-          pen.setColor(QColor(Image[i+W/2][j+H/2].x,Image[i+W/2][j+H/2].y,Image[i+W/2][j+H/2].z));
+          pen.setColor(QColor(tmp_x,tmp_y,tmp_z));
           painter->setPen(pen);
           painter->drawPoint(i,j);
 

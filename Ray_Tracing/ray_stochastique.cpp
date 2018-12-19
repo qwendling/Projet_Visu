@@ -8,7 +8,7 @@
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 #define RAY_PIXELS 4
-#define PAS_COMPUTE 10
+#define PAS_COMPUTE 20
 
 std::vector<Vec3> random_pixels(int i,int j){
     std::default_random_engine generator;
@@ -34,7 +34,7 @@ std::vector<Vec3> random_pixels(int i,int j){
 
 void Ray_stochastique::compute()
 {
-#if 0
+#if 1
     bool need_thread = true;
     int debut = 0;
     int fin;
@@ -79,15 +79,45 @@ void Ray_stochastique::compute()
                                             t_inter.Ns = 1;
 
                                         L= get_random_dir_in_cone(L,M_PI/(2.0f*(float)t_inter.Ns));
+                                        Vec3 R = glm::reflect(-L,N);
 
-                                         Vec3 R = glm::reflect(-L,N);
 
                                         //Vec3 R = glm::normalize(2*cos_theta*N-L);
 
                                         Vec3 color_diff = Kd_normalize*cos_theta;
 
+
+
                                         Vec3 Ks_normalise = Vec3(255*t_inter.Ks.r,255*t_inter.Ks.g,255*t_inter.Ks.b)/(float)(t_inter.Ns+2);
                                         Vec3 color_spec = Ks_normalise*(float)pow(glm::dot(R,glm::normalize(-r.get_direction())),t_inter.Ns);
+
+                                        if(color_spec.x < 0)
+                                            color_spec.x=0;
+                                        if(color_spec.y < 0)
+                                            color_spec.y=0;
+                                        if(color_spec.z < 0)
+                                            color_spec.z=0;
+
+                                        if(color_spec.x > 255)
+                                            color_spec.x=255;
+                                        if(color_spec.y > 255)
+                                            color_spec.y=255;
+                                        if(color_spec.z > 255)
+                                            color_spec.z=255;
+
+                                        if(color_diff.x < 0)
+                                            color_diff.x=0;
+                                        if(color_diff.y < 0)
+                                            color_diff.y=0;
+                                        if(color_diff.z < 0)
+                                            color_diff.z=0;
+
+                                        if(color_diff.x > 255)
+                                            color_diff.x=255;
+                                        if(color_diff.y > 255)
+                                            color_diff.y=255;
+                                        if(color_diff.z > 255)
+                                            color_diff.z=255;
 
                                         Image[i][j] += (color_diff + color_spec)/(float)t.liste_sources.size();
                                     }
@@ -101,6 +131,7 @@ void Ray_stochastique::compute()
 
                 }
                 Image[i][j] /= RAY_PIXELS*RAY_PIXELS;
+
             }
         }
     };
@@ -127,7 +158,7 @@ void Ray_stochastique::compute()
 
             }
         }
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         emit update_draw();
     }
 
