@@ -1,5 +1,7 @@
 #include "source_facette.h"
-
+#include <cstdlib>
+#include <ctime>
+#include <random>
 
 Vec3 operator*(const Vec3& v,double x){
     return Vec3(v.x*x,v.y*x,v.z*x);
@@ -39,8 +41,13 @@ void source_facette::draw(GLfloat r, GLfloat g, GLfloat b){
       glVertex3f(s_2.x,s_2.y,s_2.z) ;
 #else
     glBegin(GL_POINTS) ;
-    for(auto& p:liste_sources){
-        glVertex3f(p.x,p.y,p.z) ;
+    std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+    for(int i=0;i<100000;i++){
+        double alpha = 2*M_PI*distribution(generator);
+        double betha = acos(1-2*distribution(generator));
+
+        glVertex3f(liste_sources[0].x + cos(alpha)*sin(betha),liste_sources[0].y +sin(alpha)*sin(betha),liste_sources[0].z +cos(betha)) ;
     }
 #endif
       glEnd() ;

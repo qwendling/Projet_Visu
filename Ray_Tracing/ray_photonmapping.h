@@ -13,6 +13,8 @@ public:
     PhotonMap compute_photonMap();
 
     ray_photonmapping();
+
+    Vec3 get_random_dir_in_sphere();
 };
 
 #endif // RAY_PHOTONMAPPING_H
