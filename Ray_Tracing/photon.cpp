@@ -4,9 +4,9 @@
 #define K 100
 
 void findPhotonVoisin(Photon photon, PhotonMap map){
-/*
-    pcl::PointCloud<PointPhoton> photon_cloud;
-    pcl::KdTreeFLANN<PointPhoton> kdtree;
+
+    pcl::PointCloud<pcl::PointXYZ> photon_cloud;
+    pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
 
     int i=0;
 
@@ -26,8 +26,8 @@ void findPhotonVoisin(Photon photon, PhotonMap map){
     kdtree.nearestKSearch(actualPhoton,K,k_Neighbor_idx,k_Neighbor_dist);
 
 
-    for(auto&& i : k_Neighbor_idx){
+    /*for(auto&& i : k_Neighbor_idx){
         photon.listVoisin.push_back(map.at(photon_cloud[i].idPhoton));
-    }
-*/
+    }*/
+
 }

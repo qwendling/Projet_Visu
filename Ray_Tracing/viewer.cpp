@@ -268,7 +268,7 @@ void Viewer::draw()
    glColor4f(1,1,1,1) ;
    glBegin(GL_POINTS) ;
    for(auto& p:pm){
-       glVertex3f(p.position.x,p.position.y,p.position.z) ;
+       glVertex3f(p->position.x,p->position.y,p->position.z) ;
    }
    glEnd() ;
 }

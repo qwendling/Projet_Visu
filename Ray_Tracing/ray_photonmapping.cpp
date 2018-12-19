@@ -29,7 +29,7 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                     rebond = false;
                     if(grille.intersec_ray(rayon_photon,tmp_tri,tmp_inter,id)){
                         Vec3 tmp = rayon_photon.get_direction();
-                        result.push_back(Photon(tmp,tmp_inter,energie,tmp_tri));
+                        result.push_back(new Photon(tmp,tmp_inter,energie,tmp_tri));
                         float r = distribution(generator);
                         if( r > 0.5f){
                             energie /= 2.0f;

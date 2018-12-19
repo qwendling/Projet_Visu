@@ -14,6 +14,7 @@ INCLUDEPATH += ..
 INCLUDEPATH += $$_PRO_FILE_PWD_/../assimp/include
 
 LIBS += $$_PRO_FILE_PWD_/../assimp/lib/libassimp.so
+LIBS += /usr/lib/x86_64-linux-gnu/libpcl*
 
 DESTDIR =$$_PRO_FILE_PWD_/../bin/
 
