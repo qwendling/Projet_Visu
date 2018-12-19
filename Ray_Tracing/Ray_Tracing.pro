@@ -47,7 +47,9 @@ SOURCES += main.cpp \
     grid.cpp \
     cell.cpp \
     ray_phong.cpp \
-    ray_stochastique.cpp
+    ray_stochastique.cpp \
+    photon.cpp \
+    ray_photonmapping.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -60,6 +62,8 @@ HEADERS  += viewer.h \
     grid.h \
     cell.h \
     ray_phong.h \
-    ray_stochastique.h
+    ray_stochastique.h \
+    photon.h \
+    ray_photonmapping.h
 
 

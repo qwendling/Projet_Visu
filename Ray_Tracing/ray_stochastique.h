@@ -11,7 +11,7 @@ class Ray_stochastique : public QObject
 public:
     Ray_stochastique()=delete;
     Ray_stochastique(std::vector<std::vector<Vec3>>& im,qglviewer::Camera& cam,Grid& gr,QColor& bck):Image(im),camera(cam),grille(gr),Background_color(bck){}
-    void compute();
+    virtual void compute();
     std::vector<source_facette> liste_facettes;
     void add_facette(source_facette& sf){liste_facettes.push_back(sf);}
     void add_lumiere(Vec3 l){liste_lumiere.push_back(l);}

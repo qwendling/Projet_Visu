@@ -4,6 +4,7 @@
 #include <matrices.h>
 #include <assimp/types.h>
 
+
 typedef glm::vec3 Vec3;
 
 class Triangle
