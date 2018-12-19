@@ -30,6 +30,7 @@ unix {
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -Wl,-rpath,$$_PRO_FILE_PWD_/../bin
 LIBS += -L$$_PRO_FILE_PWD_/../bin -lOGLRender -lQGLViewer33 -lglut
+INCLUDEPATH += /usr/include/pcl-1.8
 }
 
 # Windows (64b)
@@ -52,7 +53,8 @@ SOURCES += main.cpp \
     ray_phong.cpp \
     ray_stochastique.cpp \
     photon.cpp \
-    ray_photonmapping.cpp
+    ray_photonmapping.cpp \
+    pointcloud.cpp
 
 HEADERS  += viewer.h \
     matrices.h \
@@ -67,6 +69,7 @@ HEADERS  += viewer.h \
     ray_phong.h \
     ray_stochastique.h \
     photon.h \
-    ray_photonmapping.h
+    ray_photonmapping.h \
+    pointcloud.h
 
 
