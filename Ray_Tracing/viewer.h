@@ -19,6 +19,7 @@
 #include "ray_phong.h"
 #include "ray_stochastique.h"
 #include "source_facette.h"
+#include "ray_photonmapping.h"
 
 /**
  * @brief The Viewer class
@@ -114,6 +115,7 @@ protected:
     MeshTri facette_lumiere;
     std::vector<source_facette> liste_facettes;
     int id_active_facette;
+    PhotonMap pm;
 private slots:
     void initPainter();
 

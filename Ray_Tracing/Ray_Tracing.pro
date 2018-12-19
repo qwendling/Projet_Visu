@@ -20,6 +20,9 @@ DESTDIR =$$_PRO_FILE_PWD_/../bin/
 # define path for shaders
 QMAKE_CXXFLAGS += -DSHADERPATH=$$_PRO_FILE_PWD_
 
+#Package
+
+
 # System dependent options
 
 # Linux & macOS/X

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <GL/glut.h>
 #include <algorithm>
+#include <ray_photonmapping.h>
 #define RESOLUTION_GRID 20
 
 Viewer::Viewer():
@@ -263,6 +264,13 @@ void Viewer::draw()
            liste_facettes[i].draw(0,1,0);
        }
    }
+
+   glColor4f(1,1,1,1) ;
+   glBegin(GL_POINTS) ;
+   for(auto& p:pm){
+       glVertex3f(p.position.x,p.position.y,p.position.z) ;
+   }
+   glEnd() ;
 }
 
 void Viewer::rayTracing(){
@@ -294,6 +302,7 @@ void Viewer::rayTracing(){
 void Viewer::keyPressEvent(QKeyEvent *e)
 {
     Vec3 cm ;
+    ray_photonmapping* rpm;
 	switch(e->key())
 	{
 		case Qt::Key_Escape:
@@ -317,6 +326,14 @@ void Viewer::keyPressEvent(QKeyEvent *e)
     case  Qt::Key_P:
         lumiere = Vec3(camera()->position().x,camera()->position().y,camera()->position().z);
         std::cout << "pos camera : " << camera()->position() << std::endl;
+        break;
+    case Qt::Key_T:
+        rpm = new ray_photonmapping(Image,*camera(),*grid_,bck);
+        for(auto& sf:liste_facettes)
+            rpm->add_facette(sf);
+        pm = rpm->compute_photonMap();
+        std::cout << "photon map compute " << pm.size() << std::endl;
+
         break;
 		default:
 			break;

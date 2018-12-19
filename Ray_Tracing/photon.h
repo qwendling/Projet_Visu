@@ -11,11 +11,11 @@ class Photon
 {
 public:
 
-    Vec3& dirOrigin;
-    Vec3& position;
+    Vec3 dirOrigin;
+    Vec3 position;
 
     float energy;
-    Triangle& triangle;
+    Triangle triangle;
 
     std::vector<Photon*> listVoisin;
 

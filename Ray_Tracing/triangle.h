@@ -25,6 +25,7 @@ public:
     double Ns;
 
     Triangle(Vec3 s1, Vec3 s2, Vec3 s3);
+    Triangle(const Triangle& t):index(t.index),normal(t.normal),s_1(t.s_1),s_2(t.s_2),s_3(t.s_3),Kd(t.Kd),Ks(t.Ks),Ka(t.Ka),Ns(t.Ns){}
     Triangle();
 
     Vec3 computeNormal()const;

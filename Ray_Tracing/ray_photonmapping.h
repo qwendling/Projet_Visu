@@ -12,9 +12,10 @@ public:
 
     PhotonMap compute_photonMap();
 
-    ray_photonmapping();
+    ray_photonmapping() =delete;
+    ray_photonmapping(std::vector<std::vector<Vec3>>& im,qglviewer::Camera& cam,Grid& gr,QColor& bck):Ray_stochastique(im,cam,gr,bck){}
 
-    Vec3 get_random_dir_in_sphere();
+    std::vector<Vec3> get_random_dir_in_sphere();
 };
 
 #endif // RAY_PHOTONMAPPING_H
