@@ -3,7 +3,7 @@
 #include <ctime>
 #include <random>
 
-#define NB_RAY_FROM_LIGHT 10
+#define NB_RAY_FROM_LIGHT 100
 
 void ray_photonmapping::compute(){
     return;
@@ -28,13 +28,14 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                 while(rebond){
                     rebond = false;
                     if(grille.intersec_ray(rayon_photon,tmp_tri,tmp_inter,id)){
-                        result.push_back(Photon(dir,tmp_inter,energie,tmp_tri));
+                        Vec3 tmp = rayon_photon.get_direction();
+                        result.push_back(Photon(tmp,tmp_inter,energie,tmp_tri));
                         float r = distribution(generator);
                         if( r > 0.5f){
                             energie /= 2.0f;
                             rebond = true;
                             id = tmp_tri.index;
-                            rayon_photon = Rayon(glm::reflect(dir,tmp_tri.computeNormal()),tmp_inter);
+                            rayon_photon = Rayon(glm::reflect(tmp,tmp_tri.computeNormal()),tmp_inter);
                         }
                     }
                 }
