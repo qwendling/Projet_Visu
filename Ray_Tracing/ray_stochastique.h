@@ -4,6 +4,9 @@
 #include "ray_phong.h"
 #include "source_facette.h"
 
+#define RAY_PIXELS 1
+#define PAS_COMPUTE 20
+
 
 class Ray_stochastique : public QObject
 {
@@ -28,5 +31,7 @@ protected slots:
     void slot_emit_update(){emit update_draw();std::cout << "ok" << std::endl;}
 
 };
+
+std::vector<Vec3> random_pixels(int i,int j);
 
 #endif // RAY_STOCHASTIQUE_H

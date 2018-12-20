@@ -7,8 +7,7 @@
 #include <QThread>
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
-#define RAY_PIXELS 4
-#define PAS_COMPUTE 20
+
 
 std::vector<Vec3> random_pixels(int i,int j){
     std::default_random_engine generator;

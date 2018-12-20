@@ -287,12 +287,20 @@ void Viewer::rayTracing(){
     connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
     rp->compute_phong();
     initPainter();*/
-    rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
+    /*rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
     rs->add_lumiere(this->lumiere);
     for(auto& sf:liste_facettes)
         rs->add_facette(sf);
     connect(rs,SIGNAL(update_draw()),SLOT(initPainter()));
     rs->compute();
+    initPainter();*/
+
+    ray_photonmapping* rpm = new ray_photonmapping(Image,*camera(),*grid_,bck);
+    rpm->add_lumiere(this->lumiere);
+    for(auto& sf:liste_facettes)
+        rpm->add_facette(sf);
+    connect(rpm,SIGNAL(update_draw()),SLOT(initPainter()));
+    rpm->compute_indirect();
     initPainter();
     std::cout << "fin ray trace" << std::endl;
 

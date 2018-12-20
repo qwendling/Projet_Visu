@@ -11,6 +11,7 @@ public:
     void compute();
 
     PhotonMap compute_photonMap();
+    void compute_indirect();
 
     ray_photonmapping() =delete;
     ray_photonmapping(std::vector<std::vector<Vec3>>& im,qglviewer::Camera& cam,Grid& gr,QColor& bck):Ray_stochastique(im,cam,gr,bck){}

@@ -1,19 +1,16 @@
 #include "photon.h"
 #include "pointcloud.h"
 
-#define K 100
+#define K 20
 
-void findPhotonVoisin(Photon* photon, PhotonMap map){
+PhotonMap findPhotonVoisin(Vec3 pos, PhotonMap map,float& radius){
 
     pcl::PointCloud<pcl::PointXYZ> photon_cloud;
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
 
-    int i=0;
-
     for(Photon* p : map){
-        PointPhoton tmp_p(p->position.x,p->position.y,p->position.z,i);
+        pcl::PointXYZ tmp_p(p->position.x,p->position.y,p->position.z);
         photon_cloud.push_back(tmp_p);
-        i++;
     }
 
     kdtree.setInputCloud(photon_cloud.makeShared());
@@ -21,13 +18,17 @@ void findPhotonVoisin(Photon* photon, PhotonMap map){
     std::vector<int> k_Neighbor_idx;
     std::vector<float> k_Neighbor_dist;
 
-    PointPhoton actualPhoton(photon->position.x,photon->position.y,photon->position.z,0);
+    pcl::PointXYZ actualPhoton(pos.x,pos.y,pos.z);
 
     kdtree.nearestKSearch(actualPhoton,K,k_Neighbor_idx,k_Neighbor_dist);
 
+    radius = *std::max_element(k_Neighbor_dist.begin(),k_Neighbor_dist.end());
+
+    PhotonMap result;
+
 
     for(auto&& i : k_Neighbor_idx){
-        photon->listVoisin.push_back(map.at(i));
+        result.push_back(map.at(i));
     }
-
+    return result;
 }
