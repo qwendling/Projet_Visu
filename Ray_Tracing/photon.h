@@ -27,6 +27,6 @@ public:
 using PhotonMap = std::vector<Photon*>;
 
 
-void findPhotonVoisin(PhotonMap map);
+void findPhotonVoisin(Photon* photon,PhotonMap map);
 
 #endif // PHOTON_H

@@ -35,14 +35,14 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                             energie /= 2.0f;
                             rebond = true;
                             id = tmp_tri.index;
-                            rayon_photon = Rayon(glm::reflect(tmp,tmp_tri.computeNormal()),tmp_inter);
+                            Vec3 R = glm::reflect(tmp,tmp_tri.computeNormal());
+                            rayon_photon = Rayon(tmp_inter,R);
                         }
                     }
                 }
             }
         }
     }
-
     return result;
 }
 

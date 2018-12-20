@@ -3,7 +3,7 @@
 
 #define K 100
 
-void findPhotonVoisin(Photon photon, PhotonMap map){
+void findPhotonVoisin(Photon* photon, PhotonMap map){
 
     pcl::PointCloud<pcl::PointXYZ> photon_cloud;
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
@@ -21,13 +21,13 @@ void findPhotonVoisin(Photon photon, PhotonMap map){
     std::vector<int> k_Neighbor_idx;
     std::vector<float> k_Neighbor_dist;
 
-    PointPhoton actualPhoton(photon.position.x,photon.position.y,photon.position.z,0);
+    PointPhoton actualPhoton(photon->position.x,photon->position.y,photon->position.z,0);
 
     kdtree.nearestKSearch(actualPhoton,K,k_Neighbor_idx,k_Neighbor_dist);
 
 
-    /*for(auto&& i : k_Neighbor_idx){
-        photon.listVoisin.push_back(map.at(photon_cloud[i].idPhoton));
-    }*/
+    for(auto&& i : k_Neighbor_idx){
+        photon->listVoisin.push_back(map.at(i));
+    }
 
 }
