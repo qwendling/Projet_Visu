@@ -4,7 +4,7 @@
 #include "ray_phong.h"
 #include "source_facette.h"
 
-#define RAY_PIXELS 1
+#define RAY_PIXELS 4
 #define PAS_COMPUTE 20
 
 

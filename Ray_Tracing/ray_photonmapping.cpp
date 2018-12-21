@@ -8,7 +8,7 @@
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 
-#define NB_RAY_FROM_LIGHT 100
+#define NB_RAY_FROM_LIGHT 300
 
 void ray_photonmapping::compute(){
     return;
@@ -48,6 +48,17 @@ PhotonMap ray_photonmapping::compute_photonMap(){
             }
         }
     }
+
+
+    pcl::PointCloud<pcl::PointXYZ> photon_cloud;
+
+    for(Photon* p : result){
+        pcl::PointXYZ tmp_p(p->position.x,p->position.y,p->position.z);
+        photon_cloud.push_back(tmp_p);
+    }
+
+    result.kdtree.setInputCloud(photon_cloud.makeShared());
+
     return result;
 }
 

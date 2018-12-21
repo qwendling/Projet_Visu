@@ -24,7 +24,10 @@ public:
     Photon(Vec3& dir,Vec3& pos, float e,Triangle& t):dirOrigin(dir),position(pos),energy(e),triangle(t){}
 };
 
-using PhotonMap = std::vector<Photon*>;
+class PhotonMap : public std::vector<Photon*>{
+public :
+    pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
+};
 
 
 PhotonMap findPhotonVoisin(Vec3 pos, PhotonMap map, float &radius);
