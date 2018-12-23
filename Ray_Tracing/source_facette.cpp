@@ -41,8 +41,22 @@ void source_facette::draw(GLfloat r, GLfloat g, GLfloat b){
       glVertex3f(s_2.x,s_2.y,s_2.z) ;
 #else
     glBegin(GL_POINTS) ;
-    for(auto& p:liste_sources){
-        glVertex3f(p.x,p.y,p.z) ;
+
+    Vec3 tmp(0,1,0);
+    tmp = glm::normalize(tmp);
+    Vec3 u = glm::cross(Vec3(1,0,0),tmp);
+    Vec3 v = glm::cross(u,tmp);
+
+
+    std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+    for(int i=0;i<100;i++){
+        double alpha = 2*M_PI*distribution(generator);
+        double betha = acos(1-distribution(generator));
+
+        Vec3 r;
+        r = (float)std::sin(betha)*(u*(float)cos(alpha) + v*(float)sin(alpha)) + tmp*(float)cos(betha);
+        glVertex3f(s_2.x+r.x,s_2.y+r.y,s_2.z+r.z) ;
     }
 #endif
       glEnd() ;

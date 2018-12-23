@@ -1,7 +1,7 @@
 #include "photon.h"
 #include "pointcloud.h"
 
-#define K 30
+#define K 100
 
 PhotonMap findPhotonVoisin(Vec3 pos, PhotonMap map,float& radius){
     std::vector<int> k_Neighbor_idx;

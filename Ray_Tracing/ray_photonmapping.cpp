@@ -1,17 +1,16 @@
 #include "ray_photonmapping.h"
-#include <cstdlib>
-#include <ctime>
-#include <random>
-#include <chrono>
-#include <thread>
-#include <QThread>
-#include <QFuture>
-#include <QtConcurrent/QtConcurrent>
 
-#define NB_RAY_FROM_LIGHT 300
+
+#define NB_RAY_FROM_LIGHT 500
+#define USE_FINAL_GATHERING 1
 
 void ray_photonmapping::compute(){
-    return;
+    compute_photonMap();
+}
+
+inline double gaussian(const Vec3& x,double sigma){
+    double n = 1.0f/(sqrt(2*M_PI)*sigma);
+    return n * std::exp(-(x.x*x.x+x.y*x.y+x.z*x.z)/(2.0f*sigma*sigma));
 }
 
 PhotonMap ray_photonmapping::compute_photonMap(){
@@ -28,7 +27,7 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                 Vec3 tmp_inter;
                 int id = -1;
                 bool rebond = true;
-                double energie = 1.0/(float)(NB_RAY_FROM_LIGHT*t.liste_sources.size());
+                double energie = 1.0f/(double)(NB_RAY_FROM_LIGHT*t.liste_sources.size());
 
                 while(rebond){
                     rebond = false;
@@ -92,7 +91,7 @@ void ray_photonmapping::compute_indirect(){
                         Vec3 inter;
                         if(grille.intersec_ray(r,t_inter,inter)){
 
-                            for(auto& t:liste_facettes){
+                            /*for(auto& t:liste_facettes){
                                 for(auto& l:t.liste_sources){
                                     Rayon r_light(l,inter-l);
                                     Triangle tmp_tri;
@@ -156,20 +155,51 @@ void ray_photonmapping::compute_indirect(){
 
                                     }
                                 }
-                            }
+                            }*/
 
                             //indirect
 
+                            #if USE_FINAL_GATHERING
 
+                            Vec3 tmp_N = t_inter.computeNormal();
+                            Vec3 rebond = get_random_dir_in_hemisphere(tmp_N);
+
+                            Rayon r_light(inter,rebond);
+                            Triangle tmp_tri;
+                            Vec3 tmp_inter;
+                            if(grille.intersec_ray(r_light,tmp_tri,tmp_inter,t_inter.index)){
+                                float radius = 1;
+                                PhotonMap voisins = findPhotonVoisin(tmp_inter,pm,radius);
+
+                                Vec3 N = tmp_tri.computeNormal();
+                                Vec3 result(0,0,0);
+                                double sum = 0;
+                                float A = (M_PI*radius);
+                                for(auto& v:voisins){
+
+                                    float cos_theta = glm::dot(-v->dirOrigin,N);
+                                    Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b)/(float)M_PI;
+                                    result += cos_theta*(float)v->energy*Kd_normalize;
+                                }
+                                Image[i][j] += result / A;
+                            }
+
+                            #else
                             float radius = 1;
                             PhotonMap voisins = findPhotonVoisin(inter,pm,radius);
-                            float A = M_PI*radius*radius;
+
                             Vec3 N = t_inter.computeNormal();
+                            Vec3 result(0,0,0);
+                            double sum = 0;
                             for(auto& v:voisins){
+                                float A = gaussian(v->position-inter,1);
                                 float cos_theta = glm::dot(-v->dirOrigin,N);
                                 Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b)/(float)M_PI;
-                                Image[i][j] += cos_theta*(float)v->energy*Kd_normalize/A;
+                                result += cos_theta*(float)v->energy*Kd_normalize*A;
+                                sum+=A;
                             }
+                            Image[i][j] += result / (float)(sum);
+                            #endif
 
 
                         }else{
@@ -227,4 +257,22 @@ std::vector<Vec3> ray_photonmapping::get_random_dir_in_sphere(){
     }
 
     return result;
+}
+
+Vec3 ray_photonmapping::get_random_dir_in_hemisphere(Vec3& normal)const{
+    Vec3 tmp(1,0,0);
+    if(1-fabs(normal.x)<0.001f)
+        tmp = Vec3(0,1,0);
+    Vec3 u = glm::cross(Vec3(1,0,0),normal);
+    Vec3 v = glm::cross(u,normal);
+
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+
+    double alpha = 2*M_PI*distribution(generator);
+    double betha = acos(1-2*distribution(generator));
+
+    return (float)std::sin(betha)*(u*(float)cos(alpha) + v*(float)sin(alpha)) + normal*(float)cos(betha);
 }
