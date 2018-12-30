@@ -3,7 +3,6 @@
 
 #define NB_RAY_FROM_LIGHT 500
 #define USE_FINAL_GATHERING 1
-
 void ray_photonmapping::compute(){
     compute_photonMap();
 }
@@ -27,7 +26,7 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                 Vec3 tmp_inter;
                 int id = -1;
                 bool rebond = true;
-                double energie = 1.0f/(double)(NB_RAY_FROM_LIGHT*t.liste_sources.size());
+                double energie = 1.0f/(double)(NB_RAY_FROM_LIGHT);
 
                 while(rebond){
                     rebond = false;
@@ -35,8 +34,7 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                         Vec3 tmp = rayon_photon.get_direction();
                         result.push_back(new Photon(tmp,tmp_inter,energie,tmp_tri));
                         float r = distribution(generator);
-                        if( r > 0.5f){
-                            energie /= 2.0f;
+                        if( r > 0.2f){
                             rebond = true;
                             id = tmp_tri.index;
                             Vec3 R = glm::reflect(tmp,tmp_tri.computeNormal());
@@ -91,7 +89,7 @@ void ray_photonmapping::compute_indirect(){
                         Vec3 inter;
                         if(grille.intersec_ray(r,t_inter,inter)){
 
-                            /*for(auto& t:liste_facettes){
+                            for(auto& t:liste_facettes){
                                 for(auto& l:t.liste_sources){
                                     Rayon r_light(l,inter-l);
                                     Triangle tmp_tri;
@@ -155,8 +153,7 @@ void ray_photonmapping::compute_indirect(){
 
                                     }
                                 }
-                            }*/
-
+                            }
                             //indirect
 
                             #if USE_FINAL_GATHERING
@@ -174,14 +171,14 @@ void ray_photonmapping::compute_indirect(){
                                 Vec3 N = tmp_tri.computeNormal();
                                 Vec3 result(0,0,0);
                                 double sum = 0;
-                                float A = (M_PI*radius);
                                 for(auto& v:voisins){
-
+                                    float A = gaussian(v->position-tmp_inter,1);
                                     float cos_theta = glm::dot(-v->dirOrigin,N);
-                                    Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b)/(float)M_PI;
+                                    Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b);
                                     result += cos_theta*(float)v->energy*Kd_normalize;
+                                    sum+=A;
                                 }
-                                Image[i][j] += result / A;
+                                Image[i][j] += result / (float)(sum*M_PI*radius);
                             }
 
                             #else
@@ -198,7 +195,7 @@ void ray_photonmapping::compute_indirect(){
                                 result += cos_theta*(float)v->energy*Kd_normalize*A;
                                 sum+=A;
                             }
-                            Image[i][j] += result / (float)(sum);
+                            Image[i][j] += result / (float)(sum*M_PI*radius);
                             #endif
 
 
@@ -267,9 +264,9 @@ Vec3 ray_photonmapping::get_random_dir_in_hemisphere(Vec3& normal)const{
     Vec3 v = glm::cross(u,normal);
 
 
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    static std::uniform_real_distribution<float> distribution(0.0f,1.0f);
 
     double alpha = 2*M_PI*distribution(generator);
     double betha = acos(1-2*distribution(generator));

@@ -9,7 +9,7 @@ PhotonMap findPhotonVoisin(Vec3 pos, PhotonMap map,float& radius){
 
     pcl::PointXYZ actualPhoton(pos.x,pos.y,pos.z);
 
-    map.kdtree.nearestKSearch(actualPhoton,K,k_Neighbor_idx,k_Neighbor_dist);
+    map.kdtree.radiusSearch(actualPhoton,radius,k_Neighbor_idx,k_Neighbor_dist);
 
     radius = *std::max_element(k_Neighbor_dist.begin(),k_Neighbor_dist.end());
 

@@ -266,8 +266,9 @@ Vec3 Ray_stochastique::get_random_dir_in_cone(Vec3 dir,double angle){
     Vec3 v = glm::cross(u,dir);
 
 
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    static std::uniform_real_distribution<float> distribution(0.0f,1.0f);
 
     double alpha = 2*M_PI*distribution(generator);
     double betha = angle*distribution(generator);
