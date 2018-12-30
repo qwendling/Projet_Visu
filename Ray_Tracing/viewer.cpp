@@ -335,6 +335,9 @@ void Viewer::keyPressEvent(QKeyEvent *e)
         lumiere = Vec3(camera()->position().x,camera()->position().y,camera()->position().z);
         std::cout << "pos camera : " << camera()->position() << std::endl;
         break;
+    case  Qt::Key_S:
+        isRendu = false;
+        break;
     case Qt::Key_T:
         rpm = new ray_photonmapping(Image,*camera(),*grid_,bck);
         for(auto& sf:liste_facettes)
@@ -351,7 +354,7 @@ void Viewer::keyPressEvent(QKeyEvent *e)
     if(!isRendu)
         update();
 
-    isRendu = false;
+
     //QGLViewer::keyPressEvent(e);
 }
 

@@ -30,6 +30,6 @@ public :
 };
 
 
-PhotonMap findPhotonVoisin(Vec3 pos, PhotonMap map, float &radius);
+PhotonMap findPhotonVoisin(Vec3 &pos, PhotonMap &map, float &radius);
 
 #endif // PHOTON_H

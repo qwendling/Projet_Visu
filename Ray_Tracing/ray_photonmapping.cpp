@@ -3,6 +3,8 @@
 
 #define NB_RAY_FROM_LIGHT 500
 #define USE_FINAL_GATHERING 1
+#define USE_DIRECT 1
+
 void ray_photonmapping::compute(){
     compute_photonMap();
 }
@@ -26,7 +28,7 @@ PhotonMap ray_photonmapping::compute_photonMap(){
                 Vec3 tmp_inter;
                 int id = -1;
                 bool rebond = true;
-                double energie = 1.0f/(double)(NB_RAY_FROM_LIGHT);
+                double energie = 100.0f/(double)(NB_RAY_FROM_LIGHT);
 
                 while(rebond){
                     rebond = false;
@@ -89,6 +91,7 @@ void ray_photonmapping::compute_indirect(){
                         Vec3 inter;
                         if(grille.intersec_ray(r,t_inter,inter)){
 
+#if USE_DIRECT
                             for(auto& t:liste_facettes){
                                 for(auto& l:t.liste_sources){
                                     Rayon r_light(l,inter-l);
@@ -154,6 +157,7 @@ void ray_photonmapping::compute_indirect(){
                                     }
                                 }
                             }
+#endif
                             //indirect
 
                             #if USE_FINAL_GATHERING
@@ -172,11 +176,15 @@ void ray_photonmapping::compute_indirect(){
                                 Vec3 result(0,0,0);
                                 double sum = 0;
                                 for(auto& v:voisins){
+                                    //Vec3 N = v->triangle.computeNormal();
                                     float A = gaussian(v->position-tmp_inter,1);
                                     float cos_theta = glm::dot(-v->dirOrigin,N);
-                                    Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b);
-                                    result += cos_theta*(float)v->energy*Kd_normalize;
+                                    //cos_theta = fabs(cos_theta);
+                                    Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b)/(float)M_PI;
+                                    result += cos_theta*(float)v->energy*Kd_normalize*A;
                                     sum+=A;
+
+
                                 }
                                 Image[i][j] += result / (float)(sum*M_PI*radius);
                             }

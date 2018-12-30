@@ -10,8 +10,9 @@
 
 
 std::vector<Vec3> random_pixels(int i,int j){
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(0.0,1.0/(double)RAY_PIXELS);
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    static std::uniform_real_distribution<float> distribution(0.0,1.0/(double)RAY_PIXELS);
 
     std::vector<Vec3> result;
 
