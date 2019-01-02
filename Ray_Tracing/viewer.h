@@ -77,8 +77,14 @@ protected:
     /// draw interesction point if exist
     void draw_debug_inter_pts();
 
-    /// Lancer de rayon
+    /// Lancer de rayon (photon mapping)
     void rayTracing();
+
+    /// Lancer de rayon (phong)
+    void rayTracing_phong();
+
+    /// Lancer de rayon (stochastique)
+    void rayTracing_stochastique();
 
 	/// recupere la matrice de modelview de la QGLViewer
 	Mat4 getCurrentModelViewMatrix() const;

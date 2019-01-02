@@ -306,6 +306,43 @@ void Viewer::rayTracing(){
 
 }
 
+void Viewer::rayTracing_phong(){
+    Image.resize(this->width());
+    for(auto& i:Image){
+        i.resize(this->height());
+        for(auto& v:i){
+            v = Vec3(1,0,1);
+        }
+    }
+
+    rp = new Ray_phong(Image,*camera(),*grid_,bck);
+    rp->add_lumiere(this->lumiere);
+    connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
+    rp->compute_phong();
+    initPainter();
+}
+
+void Viewer::rayTracing_stochastique(){
+    Image.resize(this->width());
+    for(auto& i:Image){
+        i.resize(this->height());
+        for(auto& v:i){
+            v = Vec3(1,0,1);
+        }
+    }
+
+
+    rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
+    rs->add_lumiere(this->lumiere);
+    for(auto& sf:liste_facettes)
+        rs->add_facette(sf);
+    connect(rs,SIGNAL(update_draw()),SLOT(initPainter()));
+    rs->compute();
+    initPainter();
+
+    std::cout << "fin ray trace" << std::endl;
+
+}
 
 void Viewer::keyPressEvent(QKeyEvent *e)
 {
@@ -334,6 +371,14 @@ void Viewer::keyPressEvent(QKeyEvent *e)
     case  Qt::Key_P:
         lumiere = Vec3(camera()->position().x,camera()->position().y,camera()->position().z);
         std::cout << "pos camera : " << camera()->position() << std::endl;
+        break;
+    case  Qt::Key_R:
+        isRendu = true;
+        rayTracing_phong();
+        break;
+    case  Qt::Key_B:
+        isRendu = true;
+        rayTracing_stochastique();
         break;
     case  Qt::Key_S:
         isRendu = false;
@@ -404,12 +449,12 @@ void Viewer::draw_debug_line(){
     glVertex3fv(orig + 100.0 * dir);
     glEnd();
 
-    glLineWidth(2.0);
+    /*glLineWidth(2.0);
     glColor3f(1.0, 1.0, 0.0);
     glBegin(GL_LINES);
     glVertex3fv(orig_light);
     glVertex3fv(orig_light + 100.0 * dir_light);
-    glEnd();
+    glEnd();*/
 
 }
 

@@ -9,11 +9,13 @@ void Ray_phong::compute_phong(){
             /*point.setX(i);
             point.setY(j);
             camera.convertClickToLine(point, orig, dir);*/
-            orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,-1));
+            orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,0));
             dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,1));
 
             Vec3 o (orig[0],orig[1],orig[2]);
             Vec3 d (dir[0],dir[1],dir[2]);
+
+            d = d-o;
 
             Rayon r (o,d);
 
