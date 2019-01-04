@@ -26,7 +26,8 @@ public:
 
     bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,int id_skip_tri)const;
     bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter)const{return intersec_ray(r,t,inter,-1);}
-    //pour le debug
+
+    //Debug
     bool intersec_ray(const Rayon& r,Triangle& t,Vec3& inter,std::vector<Cell>& cell_passed,int id_skip_tri);
 };
 

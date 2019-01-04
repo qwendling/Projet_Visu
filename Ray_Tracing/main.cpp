@@ -11,25 +11,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     srand (time(NULL));
 
-    /*glutInit(&argc, argv);
-      glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-      glutInitWindowPosition(0,0) ;
-      glutInitWindowSize(500, 500);
-      int win = glutCreateWindow("Rendu");
-      GLenum err = glewInit();
-      if (GLEW_OK != err)
-        {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        /*fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-        }
-    */
-
     QGLFormat glFormat;
     glFormat.setVersion( 3, 3 );
     glFormat.setProfile( QGLFormat::CoreProfile ); // Requires >=Qt-4.8.0
-    //MDR
-    //glFormat.setSampleBuffers( true );
-    //QGLFormat::setDefaultFormat(glFormat);
 
     Viewer view;
     view.loadMesh("../scene2.obj");

@@ -8,20 +8,6 @@ Rayon::Rayon():origine(0,0,0),direction(0,0,0)
 
 
 bool Rayon::intersecTri(const Triangle t, Vec3& inter) const{
-    // recuperation des indices de points
-    // recuperation des points
-
-    // calcul de l'equation du plan (N+d)
-
-    // calcul de l'intersection rayon plan
-    // I = P + alpha*Dir est dans le plan => calcul de alpha
-
-    // alpha => calcul de I
-
-    // I dans le quad ?
-
-
-
     Vec3 p1 = t.s_1;
 
     Vec3 NQ = t.normal;

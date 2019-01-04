@@ -19,8 +19,6 @@ typedef glm::vec4 Vec4;
 
 
 
-/// RACCOURCIS CREATIONS DE MATRICES
-
 inline Mat4 translate(float tx, float ty, float tz) { return glm::translate(Vec3(tx,ty,tz));}
 
 inline Mat4 scale(float sx, float sy, float sz) { return glm::scale(Vec3(sx,sy,sz));}
@@ -32,7 +30,6 @@ inline Mat4 rotateY(float alpha) { return glm::rotate(float(M_PI/180*alpha), Vec
 inline Mat4 rotateZ(float alpha) { return glm::rotate(float(M_PI/180*alpha), Vec3(0,0,1));}
 
 
-/// pour std::cout << Mat4
 inline std::ostream &operator<< (std::ostream &out, const Mat4 &m)
 {
 	for (int i=0;i<3;++i)
@@ -51,17 +48,11 @@ inline std::ostream &operator<< (std::ostream &out, const Mat4 &m)
 }
 
 
-/// pour std::cout << Mat4
 inline std::ostream &operator<< (std::ostream &out, const Vec3 &v)
 {
 	out << "( " << v[0] << " , "<< v[1] << " , "<< v[2] << " )";
 	return out;
 }
-
-
-
-// FONCTION A CODER ?
-// Comment verifier ?
 
 inline float vec_dot(const Vec3& v1, const Vec3& v2)
 {
@@ -96,13 +87,4 @@ inline Vec3 vec_normalize(const Vec3& v)
 	return n;
 }
 
-/*
-Vec3 operator*(const Vec3& v,int x){
-    return Vec3(v.x*x,v.y*x,v.z*x);
-}
-
-Vec3 operator/(const Vec3& v,int x){
-    return Vec3(v.x/x,v.y/x,v.z/x);
-}
-*/
 #endif // MATRICES_H

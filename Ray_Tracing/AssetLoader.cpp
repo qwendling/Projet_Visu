@@ -12,7 +12,6 @@ bool AssetLoader::import(const std::string filename){
         fin.close();
     }else{
         this->_importer->GetErrorString();
-        //std::cout << err_Importer << std::endl;
         std::cout << "erreur lecture du fichier "<< strerror(errno) << std::endl;
         return false;
     }
@@ -37,29 +36,21 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
         return false;
     }
 
-    /*pVertices.resize(_scene->mNumMeshes);
-    pNormales.resize(_scene->mNumMeshes);
-    pIndices.resize(_scene->mNumMeshes);*/
     pMesh.resize(_scene->mNumMeshes);
 
     aiMaterial** mat = _scene->mMaterials;
 
     for(unsigned int m=0;m < _scene->mNumMeshes;m++){
-        /*vector<glm::vec3>& vertices = pVertices[m];
-        vector<glm::vec3>& normals = pNormales[m];
-        vector<unsigned int>& indices = pIndices[m];*/
         MeshTri& Tmesh = pMesh[m];
 
         const aiMesh* mesh = _scene->mMeshes[m];
 
         if(mesh->HasPositions()){
-            //vertices.resize(mesh->mNumVertices);
             for(unsigned int v=0;v<mesh->mNumVertices;++v){
                 const aiVector3D& vertex = mesh->mVertices[v];
                 Tmesh.add_vertex(glm::vec3(vertex.x,vertex.y,vertex.z));
             }
 
-            //indices.resize(mesh->mNumFaces * 3);
             for(unsigned int f=0;f< mesh->mNumFaces;++f){
                 const struct aiFace& face = mesh->mFaces[f];
                 assert(face.mNumIndices == 3);
@@ -67,11 +58,9 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
             }
 
             if(mesh->HasNormals()){
-                //normals.resize(mesh->mNumVertices);
                 for(unsigned int n=0;n<mesh->mNumVertices;++n){
                     const aiVector3D& normal = mesh->mNormals[n];
                     Tmesh.add_normal(glm::vec3(normal.x,normal.y,normal.z));
-                    //normals[n] = glm::vec3(normal.x,normal.y,normal.z);
                 }
             }
         }
@@ -79,8 +68,6 @@ bool AssetLoader::loadData(vector<MeshTri>& pMesh){
             Tmesh.set_DiffuseColor(mat[mesh->mMaterialIndex]);
         Tmesh.set_list_triangle();
     }
-
-    std::cout << "load data print 3" <<  std::endl;
 
     return true;
 }

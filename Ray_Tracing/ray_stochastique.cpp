@@ -73,15 +73,12 @@ void Ray_stochastique::compute()
                                         Vec3 L = glm::normalize(l-inter);
                                         float cos_theta = glm::dot(L,N);
 
-                                        //Bon ca marche mais pas ouf #scotch
                                         if(t_inter.Ns < 1)
                                             t_inter.Ns = 1;
 
                                         L= get_random_dir_in_cone(L,M_PI/(2.0f*(float)t_inter.Ns));
                                         Vec3 R = glm::reflect(-L,N);
 
-
-                                        //Vec3 R = glm::normalize(2*cos_theta*N-L);
 
                                         Vec3 color_diff = Kd_normalize*cos_theta;
 

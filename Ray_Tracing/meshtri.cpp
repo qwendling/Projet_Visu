@@ -134,7 +134,6 @@ void MeshTri::add_tri(int i1, int i2, int i3)
 
 void MeshTri::add_quad(int i1, int i2, int i3, int i4)
 {
-	// decoupe le quad en 2 triangles: attention a l'ordre
     add_tri(i1,i2,i3);
 
     add_tri(i3,i4,i1);
@@ -196,39 +195,21 @@ void MeshTri::create_spirale()
 
 void MeshTri::compute_normals()
 {
-	// ALGO:
-	// init des normale a 0,0,0
-	// Pour tous les triangles
-	//   calcul de la normale -> N
-	//   ajout de N au 3 normales des 3 sommets du triangles
-	// Fin_pour
-	// Pour toutes les normales
-	//   normalisation
-	// Fin_pour
     for(int i=0;i<(int)m_points.size();i++){
         add_normal(Vec3(0,0,0));
     }
     Vec3 NF;
-    std::cout << "test1" << std::endl;
     for(int i=0;i<(int)m_indices.size()-1;i+=3){
-        std::cout << "------------------------------------" << std::endl;
         NF=cross(m_points[m_indices[i]]-m_points[m_indices[i+1]],m_points[m_indices[i+2]]-m_points[m_indices[i+1]]);
-        std::cout << m_points[m_indices[i]]-m_points[m_indices[i+1]] << std::endl;
-        std::cout << m_points[m_indices[i+2]]-m_points[m_indices[i+1]] << std::endl;
-        std::cout << NF << std::endl;
         NF=normalize(NF);
-        std::cout << NF << std::endl;
-        std::cout << "------------------------------------" << std::endl;
         m_normals[m_indices[i]]=m_normals[m_indices[i]]+NF;
         m_normals[m_indices[i+1]]=m_normals[m_indices[i+1]]+NF;
         m_normals[m_indices[i+2]]=m_normals[m_indices[i+2]]+NF;
     }
-    std::cout << "test2" << std::endl;
     for(int i=0;i<(int)m_points.size();i++){
         m_normals[i]=normalize(m_normals[i]);
         std::cout << m_normals[i] << std::endl;
     }
-    std::cout << "test3" << std::endl;
     gl_update();
 
 }
@@ -253,12 +234,9 @@ void MeshTri::set_DiffuseColor(aiMaterial* mat){
         Ns = 24.0f;
     }
     Ns /= 100.f;
-    //std::cout << Kd.r << " " << Kd.g << " " << Kd.b << std::endl;
 }
 
 aiColor3D MeshTri::getColor(){
-    /*std::cout << "get" << std::endl;
-    std::cout << Kd.r << " " << Kd.g << " " << Kd.b << std::endl;*/
     return Kd;
 }
 

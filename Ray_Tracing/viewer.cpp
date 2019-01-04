@@ -48,25 +48,7 @@ void Viewer::loadMesh(const std::string filename){
         }
     }
     this->grid_ = new Grid(lt,RESOLUTION_GRID);
-    /*
-    int i=0;
-    for(auto& c:grid_->liste_cell){
-        for(auto& c2:c){
-            for(auto& c3:c2){
-                List_triangle tmp = c3.triangule();
-                if(!c3.t_list.empty())
-                    for(auto& t:tmp){
-                        debug.add_vertex(t.s_1);
-                        debug.add_vertex(t.s_2);
-                        debug.add_vertex(t.s_3);
 
-                        debug.add_tri(i,i+1,i+2);
-                        i+=3;
-                    }
-
-            }
-        }
-    }*/
     std::cout << "Viewer load mesh : OK " << std::endl;
 }
 
@@ -97,7 +79,7 @@ void Viewer::init()
 	std::cout << "GL VERSION = " << glGetString(GL_VERSION) << std::endl;
 
     bck=QColor(40,40,0,255);
-	// la couleur de fond
+
     glClearColor(bck.red()/255,bck.green()/255,bck.blue()/255,0.0);
 
 	// QGLViewer initialisation de la scene
@@ -191,15 +173,6 @@ void Viewer::drawOverpaint(QPainter *painter) {
   {
       for (int i=-W/2; i<W/2; i++)
       {
-        /*if(i%20 == 0){
-            pen.setColor(QColor(0,255,0,255));
-            painter->setPen(pen);
-            painter->drawPoint(i,j);
-        }else{
-            pen.setColor(QColor(255,0,255,255));
-            painter->setPen(pen);
-            painter->drawPoint(i,j);
-        }*/
           double tmp_x,tmp_y,tmp_z;
           tmp_x = Image[i+W/2][j+H/2].x;
           clamp(tmp_x,0,255);
@@ -281,19 +254,6 @@ void Viewer::rayTracing(){
             v = Vec3(1,0,1);
         }
     }
-
-    /*rp = new Ray_phong(Image,*camera(),*grid_,bck);
-    rp->add_lumiere(this->lumiere);
-    connect(rp,SIGNAL(update_draw()),SLOT(initPainter()));
-    rp->compute_phong();
-    initPainter();*/
-    /*rs = new Ray_stochastique(Image,*camera(),*grid_,bck);
-    rs->add_lumiere(this->lumiere);
-    for(auto& sf:liste_facettes)
-        rs->add_facette(sf);
-    connect(rs,SIGNAL(update_draw()),SLOT(initPainter()));
-    rs->compute();
-    initPainter();*/
 
     ray_photonmapping* rpm = new ray_photonmapping(Image,*camera(),*grid_,bck);
     rpm->add_lumiere(this->lumiere);
@@ -399,8 +359,6 @@ void Viewer::keyPressEvent(QKeyEvent *e)
     if(!isRendu)
         update();
 
-
-    //QGLViewer::keyPressEvent(e);
 }
 
 
@@ -449,13 +407,6 @@ void Viewer::draw_debug_line(){
     glVertex3fv(orig + 100.0 * dir);
     glEnd();
 
-    /*glLineWidth(2.0);
-    glColor3f(1.0, 1.0, 0.0);
-    glBegin(GL_LINES);
-    glVertex3fv(orig_light);
-    glVertex3fv(orig_light + 100.0 * dir_light);
-    glEnd();*/
-
 }
 
 
@@ -468,7 +419,6 @@ void Viewer::draw_debug_inter_pts(){
 
 }
 
-//Shift + clic action
 void Viewer::postSelection(const QPoint &point)
 {
     camera()->convertClickToLine(point, orig, dir);
@@ -514,7 +464,7 @@ void Viewer::mousePressEvent(QMouseEvent* event)
     {
         case Qt::LeftButton:
         {
-            //testRendu(event->x(),event->y());
+
         }
         break;
     }

@@ -104,15 +104,11 @@ void ray_photonmapping::compute_indirect(){
                                         Vec3 L = glm::normalize(l-inter);
                                         float cos_theta = glm::dot(L,N);
 
-                                        //Bon ca marche mais pas ouf #scotch
                                         if(t_inter.Ns < 1)
                                             t_inter.Ns = 1;
 
                                         L= get_random_dir_in_cone(L,M_PI/(2.0f*(float)t_inter.Ns));
                                         Vec3 R = glm::reflect(-L,N);
-
-
-                                        //Vec3 R = glm::normalize(2*cos_theta*N-L);
 
                                         Vec3 color_diff = Kd_normalize*cos_theta;
 
@@ -176,10 +172,8 @@ void ray_photonmapping::compute_indirect(){
                                 Vec3 result(0,0,0);
                                 double sum = 0;
                                 for(auto& v:voisins){
-                                    //Vec3 N = v->triangle.computeNormal();
                                     float A = gaussian(v->position-tmp_inter,1);
                                     float cos_theta = glm::dot(-v->dirOrigin,N);
-                                    //cos_theta = fabs(cos_theta);
                                     Vec3 Kd_normalize = Vec3(255*v->triangle.Kd.r,255*v->triangle.Kd.g,255*v->triangle.Kd.b)/(float)M_PI;
                                     result += cos_theta*(float)v->energy*Kd_normalize*A;
                                     sum+=A;

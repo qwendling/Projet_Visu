@@ -2,8 +2,6 @@
 
 Grid::Grid(List_triangle &list,unsigned def){
     Cell aabb_list = Cell::get_AABB(list);
-    std::cout << "max " << aabb_list.get_max() << std::endl;
-    std::cout << "min " << aabb_list.get_min() << std::endl;
 
     Vec3 max = aabb_list.get_max();
     Vec3 min = aabb_list.get_min();
@@ -66,14 +64,11 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     Triangle tr;
     List_triangle tmp = aabb.triangule();
 
-    //std::cout << "debut dda" << std::endl;
-
     if((r.get_origine().x <= this->aabb.get_xmax() && r.get_origine().y <= this->aabb.get_ymax() && r.get_origine().z <= this->aabb.get_zmax())
             && (r.get_origine().x >= this->aabb.get_xmin() && r.get_origine().y >= this->aabb.get_ymin() && r.get_origine().z >= this->aabb.get_zmin())){
         cube = r.get_origine();
     }else{
         if(!r.intersecListeTri(tmp,tr,cube)){
-            //std::cout << "dehors " << std::endl;
             return false;
         }
 
@@ -102,7 +97,6 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
 
     Vec3 rayOrigGrid = origin_r-aabb.get_min();
 
-    // #scotch
     rayOrigGrid.x = fabs(rayOrigGrid.x);
     rayOrigGrid.y = fabs(rayOrigGrid.y);
     rayOrigGrid.z = fabs(rayOrigGrid.z);
@@ -171,12 +165,10 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, int id_skip_tr
     while (true)
     {
         if(cube.x >= N || cube.y >= N || cube.z >= N || cube.x < 0 || cube.y < 0 || cube.z < 0){
-            //std::cout << "rien trouver " << std::endl;
             return has_intersect;
         }
        if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter))
        {
-           //std::cout << "inter find" << std::endl;
           double dist_tmp = glm::distance(r.get_origine(),tmp_inter);
           if(dist_tmp < distance ){
               inter = tmp_inter;
@@ -225,14 +217,11 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     Triangle tr;
     List_triangle tmp = aabb.triangule();
 
-    //std::cout << "debut dda" << std::endl;
-
     if((r.get_origine().x <= this->aabb.get_xmax() && r.get_origine().y <= this->aabb.get_ymax() && r.get_origine().z <= this->aabb.get_zmax())
             && (r.get_origine().x >= this->aabb.get_xmin() && r.get_origine().y >= this->aabb.get_ymin() && r.get_origine().z >= this->aabb.get_zmin())){
         cube = r.get_origine();
     }else{
         if(!r.intersecListeTri(tmp,tr,cube)){
-            //std::cout << "dehors " << std::endl;
             return false;
         }
 
@@ -335,14 +324,12 @@ bool Grid::intersec_ray(const Rayon& r, Triangle& t, Vec3& inter, std::vector<Ce
     while (true)
     {
         if(cube.x >= N || cube.y >= N || cube.z >= N || cube.x < 0 || cube.y < 0 || cube.z < 0){
-            //std::cout << "rien trouver " << std::endl;
             return has_intersect;
         }
         liste_cell[cube.x][cube.y][cube.z].draw();
         cell_passed.push_back(liste_cell[cube.x][cube.y][cube.z]);
        if (r.intersecListeTri(liste_cell[cube.x][cube.y][cube.z].t_list,tmp_triangle,tmp_inter))
        {
-           //std::cout << "inter find" << std::endl;
           double dist_tmp = glm::distance(r.get_origine(),tmp_inter);
           if(dist_tmp < distance ){
               inter = tmp_inter;

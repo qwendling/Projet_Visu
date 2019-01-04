@@ -328,7 +328,5 @@ List_triangle Cell::triangule()const{
     lt.push_back(Triangle(p7,p6,p2));
     lt.push_back(Triangle(p7,p3,p2));
 
-    /*std::cout << p1 << std::endl;
-    std::cout << p7 << std::endl;*/
     return lt;
 }

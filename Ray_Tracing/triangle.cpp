@@ -44,15 +44,8 @@ Vec3 Triangle::computeNormal() const{
 
 bool Triangle::is_points_in_triangle(const Vec3& P) const
 {
-    // On sait que P est dans le plan du quad.
-
-    // P est-il au dessus des 4 plans contenant chacun la normale au quad et une arete AB/BC/CD/DA ?
-    // si oui il est dans le quad
-
-    //On calcul la normale moyenne au quad
     Vec3 NQ = this->normal;
 
-    //On test si le point est au dessus des 4 plan
 
     Vec3 NP1 = cross(NQ,s_2-s_1);
     Vec3 NP2 = cross(NQ,s_3-s_2);

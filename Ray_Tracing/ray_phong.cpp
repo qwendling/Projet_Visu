@@ -6,9 +6,6 @@ void Ray_phong::compute_phong(){
     //QPoint point;
     for(unsigned i=0;i<Image.size();i++){
         for(unsigned j=0;j<Image[i].size();j++){
-            /*point.setX(i);
-            point.setY(j);
-            camera.convertClickToLine(point, orig, dir);*/
             orig = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,0));
             dir = camera.unprojectedCoordinatesOf(qglviewer::Vec(i,j,1));
 
@@ -35,11 +32,8 @@ void Ray_phong::compute_phong(){
                         float cos_theta = glm::dot(L,N);
                          Vec3 R = glm::reflect(-L,N);
 
-                        //Vec3 R = glm::normalize(2*cos_theta*N-L);
-
                         Vec3 color_diff = Kd_normalize*cos_theta;
 
-                        //Bon ca marche mais pas ouf #scotch
                         if(t_inter.Ns < 1)
                             t_inter.Ns = 1;
 
